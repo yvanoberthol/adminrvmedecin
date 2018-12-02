@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:insert="commons/header::common-header"/>
+<body>
+
+<div th:fragment="myfooter">
+	<div class="row bg-dark" style="margin-top:25px; color:white; border-top: 10px solid royalblue">
+		<div class="col-md-4 text-center">
+			<h4 class="font-weight-bold" style="color:royalblue">Fonctionnalités de l'application</h4>
+			<h6><a th:href="@{/specialites}" style="color:gray;">Gestion des domaines médicaux</a></h6>
+			<h6><a th:href="@{/medecins}" style="color:grey;">Gestion des médécins</a></h6>
+			<h6><a th:href="@{/creneaux}" style="color:grey;">Gestion des créneaux</a></h6>
+			<h6 sec:authorize="hasRole('ROLE_SUPERADMIN')">
+			<a th:href="@{/users}" style="color:gray;">Gestion des utilisateurs</a>
+			</h6>
+		</div>
+		<div class="col-md-4 text-center">
+			<h4 class="font-weight-bold" style="color:royalblue">Contactez nous</h4>
+			<h6>Email: yvanoberthol@gmail.com</h6>
+			<h6>Tel: 690735187 - 682296797</h6>
+		</div>
+		<div class="col-md-4 text-center">
+			<h4 class="font-weight-bold" style="color:royalblue">Notre état et situation</h4>
+			<h6>Nous sommes situé à bonabéri(ngwele)</h6>
+			<h6>Mon cabinet de médécin copyright @<span class="text-warning" th:text="${#dates.format(session.date,'yyyy')}"></span></h6>
+		</div>
+</div>
+</div>
+<div th:fragment="body-common-scripts">
+	
+    <script th:src="@{/js/jquery.js}"></script>
+    <script th:src="@{js/popper.min.js}"></script>
+    <script th:src="@{js/bootstrap.js}"></script>
+    <script th:src="@{js/canvasjs.min.js}"></script>
+    <script th:src="@{js/bootstrap-select.js}"></script>
+    <script th:src="@{js/typing.js}"></script>
+    <script type="text/javascript">
+	    $(document).ready(function(){
+	    	$('#page-effect').fadeIn(1000);
+	    	var url = "http://localhost:8089/menuPrincipal";
+	    	$("#loader").fadeOut(15000,function(){
+	    		$(location).attr('href', url);
+	    	});
+	    	
+	    	var name = $('#name-authenticate').html();
+	    	console.log(name);
+	    	//ecrire automatiquement le nom
+	    	$('#myName').typing(
+		    	{
+		    		sentences:[name],
+		    		caretChar: '',
+		    		caretClass: 'typingjs__caret',
+		    		ignoreContent: false,
+		    		ignorePrefix: false,
+		    		typeDelay: 800,
+		    		sentenceDelay: 1500,
+		    		humanize: true
+		    	}		
+	    	);
+	    });
+	    
+	    ScrollToTop=function() {
+    	  var s = $(window).scrollTop();
+    	  if (s > 250) {
+    	    $('.scrollup').fadeIn();
+    	  } else {
+    	    $('.scrollup').fadeOut();
+    	  }
+    	 
+    	  $('.scrollup').click(function () {
+    	      $("html, body").animate({ scrollTop: 0 }, 500);  
+    	      setTimeOut(500);
+    	      $('html, body').stop();
+    	      return false;
+    	  });
+    	}
+
+    	$(window).scroll(function() {
+    	  ScrollToTop();
+    	});
+    </script>
+</div>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:insert="commons/header::common-header"/>
+<body>
+<a href="#" title="Haut de page" class="scrollup rounded"><span class="fa fa-arrow-up"></span></a>
+<span sec:authentication="name" id="name-authenticate" style="display:none"></span>
+<div class="container">
+	<div class="jumbotron jumbotron-fluid bg-dark" style="margin-top:20px; color:white; border-bottom: 10px solid royalblue">
+		  <div class="container text-center">
+		    <h1 style="color:royalblue">Espace d'administration à la gestion de notre cabinet</h1>      
+		    <p>Organisation et gestion des activités relatives au cabinet médical.</p>
+		    <h3>
+		    	<span sec:authorize="isAuthenticated()">
+	                Bienvenue <span class="text-warning" id="myName"></span> |
+	                <a th:href="@{/logout}">Déconnexion</a>
+	            </span>
+		    </h3>
+		    <p>
+		    	Les rôles à votre disposition: <span sec:authentication="principal.authorities" style="color:grey"></span>
+		    </p>
+		  </div>
+	</div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-4" style="margin-top:20px">
+        	<div class="card">
+			  <div class="card-header text-center font-weight-bold bg-info">
+			  		Domaines médicaux
+			  </div>
+			  <div class="card-body text-center">
+				  	<img class="card-img-top" 
+				  th:src="@{/imgs/programme_medical.jpg}" 
+				  alt="Spécialité médicale" style="width:200px; height:200px">
+			  </div> 
+			  <div class="card-footer text-center">
+			  		<a th:href="@{/specialites}">
+					     Gestion des différentes spécialités médicales
+					  </a>
+			  </div>
+			</div>
+        </div>
+        
+        <div class="col-xs-12 col-sm-6 col-md-4" style="margin-top:20px">
+        	<div class="card">
+			  <div class="card-header text-center font-weight-bold bg-info">
+			  		Créneaux Horaires
+			  </div>
+			  <div class="card-body text-center">
+				  	<img class="card-img-top" 
+				  th:src="@{/imgs/creneau.jpg}" 
+				  alt="utilisateurs" style="width:200px; height:200px">
+			  </div> 
+			  <div class="card-footer text-center">
+			  		<a th:href="@{/creneaux}">
+					     Gestion des créneaux horaires des médecins du cabinet médical
+					  </a>
+			  </div>
+			</div>
+        </div>
+        
+        <div class="col-xs-12 col-sm-6 col-md-4" style="margin-top:20px">
+        	<div class="card">
+			  <div class="card-header text-center font-weight-bold bg-info">
+			  		Médécins
+			  </div>
+			  <div class="card-body text-center">
+				  	<img class="card-img-top" 
+				  th:src="@{/imgs/medecin.jpg}" 
+				  alt="utilisateurs" style="width:200px; height:200px">
+			  </div> 
+			  <div class="card-footer text-center">
+			  		<a th:href="@{/medecins}">
+					     Gestion des médécins du cabinet médical
+					  </a>
+			  </div>
+			</div>
+        </div>
+        
+        <div class="col-xs-12 col-sm-6 col-md-4" sec:authorize="hasRole('ROLE_SUPERADMIN')" style="margin-top:20px">
+        	<div class="card">
+			  <div class="card-header text-center font-weight-bold bg-info">
+			  		Utilisateurs
+			  </div>
+			  <div class="card-body text-center">
+				  	<img class="card-img-top" 
+				  th:src="@{/imgs/comptes_utilisateurs.png}" 
+				  alt="utilisateurs" style="width:200px; height:200px">
+			  </div> 
+			  <div class="card-footer text-center">
+			  		<a th:href="@{/users}">
+					     Gestion des utilisateurs de cette application
+					  </a>
+			  </div>
+			</div>
+        </div>
+    </div>
+    <div th:replace="commons/footer::myfooter"></div>
+    <div th:replace="commons/footer::body-common-scripts"></div>
+</div>
+</body>
+</html>

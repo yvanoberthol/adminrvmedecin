@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:insert="commons/header::common-header"/>
+<body>
+<div class="container">
+	<div class="row">
+		<div class="col-md-10 offset-md-1">
+		<div th:insert="commons/header::myheaderprincipal"></div>
+			<h1 class="text-center grand-titre">La liste des médécins  (<span th:text="${medecins.totalElements}" style="color:royalblue"></span>) 
+            </h1>
+			<nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top text-center">
+			  	<form class="form-inline" th:action="@{/medecins}" method="get">
+				    <input class="form-control mr-sm-2" type="text" name="nom" placeholder="nom ou prénom du médécin">
+				    <button class="btn btn-success" type="submit">Rechercher</button>
+				 </form>
+			</nav>
+			<div class="table-responsive">
+				<table class="table table-bordered">
+					<tr>
+						<th>ID</th>
+						<th>Nom(s) et prénom(s)</th>
+						<th>Description</th>
+						<th colspan="2">Actions</th>
+					</tr>
+					<tr th:each="medecin:${medecins.content}" th:if="${medecins.totalElements > 0}">
+						<td th:text="${medecin.getId()}"></td>
+						<td th:text="${medecin.getNom()}+' '+${medecin.getPrenom()}"></td>
+						<td><a th:href="@{/detailMedecin(id=${medecin.getId()})}" class="btn btn-warning"><span class="fa fa-ellipsis-h"></span> Afficher plus de détails</a></td>
+						<td><a th:href="@{/formModifMedecin(id=${medecin.getId()})}" class="btn btn-info"><span class="fa fa-edit"></span> Modifier</a></td>
+						<td>
+							<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmationSupp" th:attrappend="data-target=${medecin.getId()}">
+								<span class="fa fa-times-circle"></span> Supprimer
+							</button>	
+							<div class="modal modalSupp fade" id="confirmationSupp" tabindex="-1" role="dialog"  th:attrappend="id=${medecin.getId()}">
+	                               <div class="modal-dialog modal-dialog" role="document">
+	                                   <div class="modal-content">
+	                                       <div class="modal-header" style="background-color: royalblue">
+	                                           <h4 class="modal-title">Supprimer un médécin</h4>
+	                                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                                       </div>
+	                                       <div class="modal-body">
+	                                           <p>Voulez vous supprimer le médécin <strong><span th:text="${medecin.getNom()}+' '+${medecin.getPrenom()}" class="text-info"></span></strong>?</p>
+	                                       </div>
+	                                       <div class="modal-footer">
+	                                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	                                           <form th:action="@{/deleteMedecin}" method="POST">
+												<input type="hidden" name="id" th:value="${medecin.getId()}">
+												<button class="btn btn-danger" type=submit>
+													<span class="fa fa-times-circle"></span> Supprimer
+												</button>
+											</form>
+	                                       </div>
+	                                   </div>
+	                               </div>
+	                           </div>
+						</td>
+					</tr>
+					<tr th:if="${medecins.totalElements == 0}">
+						<td colspan="5" class="text-center"><h3 class="text-danger">Aucun résultat trouvé ...</h3></td>
+					</tr>
+				</table>
+			</div>
+			<div>
+				<ul th:if="${medecins.totalPages > 0}" class="pagination">
+					<li class="page-item" th:classappend="${medecins.number < 1} ? disabled">
+						<a class="page-link" th:href="@{/medecins(size=${medecins.size}, page=${medecins.number})}"><span class="fa fa-angle-double-left"></span> Previous</a>
+					</li>
+			    	<li th:each="pageNumber : ${pageNumbers}" th:classappend="${pageNumber==medecins.number + 1} ? active" class="page-item">
+			    		<a th:href="@{/medecins(size=${medecins.size}, page=${pageNumber})}"
+				        th:text=${pageNumber} class="page-link">
+			       		</a>
+			    	</li>
+			    	<li class="page-item" th:classappend="${medecins.totalPages == medecins.number + 1} ? disabled">
+						<a class="page-link" th:href="@{/medecins(size=${medecins.size}, page=${medecins.number + 2})}">Next <span class="fa fa-angle-double-right"></span></a>
+					</li> 
+				</ul>
+				<ul class="pagination justify-content-end">
+				  <li class="page-item">
+				  	<a class="btn" style="background-color: purple; color:white" th:href="@{/formAddMedecin}">
+						<span class="fa fa-plus"></span> Ajouter un nouveau médécin
+					</a>
+				  </li>
+				</ul>		
+			</div>
+		</div>
+	</div>
+</div>
+<div th:replace="commons/footer::body-common-scripts"></div>
+</body>
+</html>

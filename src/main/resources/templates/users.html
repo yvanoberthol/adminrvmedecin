@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:insert="commons/header::common-header"/>
+<body id="page-effect">
+<div class="container">
+	<div class="row">
+		<div class="col-md-10 offset-md-1">
+		<div th:insert="commons/header::myheaderprincipal"></div>
+			<h1 class="text-center grand-titre">La liste des comptes utilisateurs  (<span th:text="${users.totalElements}" style="color:royalblue"></span>) 
+            </h1>
+			<nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top text-center">
+			  	<form class="form-inline" th:action="@{/users}" method="get">
+				    <input class="form-control mr-sm-2" type="text" name="nom" placeholder="Nom de l'utilisateur">
+				    <button class="btn btn-success" type="submit">Rechercher</button>
+				 </form>
+			</nav>
+			<div class="text-center bg-danger" th:if="${useradmin == true}" style="color:white">
+				<span class="fa fa-times-circle"></span><span> Vous n'avez pas le droit de supprimer un compte <span class="text-warning">super administrateur</span>.</span>
+			</div>
+			<div class="text-center bg-danger" th:if="${useradminrole == true}" style="color:white">
+				<span class="fa fa-times-circle"></span><span> Vous ne pouvez pas enlever de droit à un <span class="text-warning">super administrateur</span>.</span>
+			</div>
+			<div class="text-center bg-danger" th:if="${useradminDesactivate == true}" style="color:white">
+				<span class="fa fa-times-circle"></span><span> Vous ne pouvez pas désactiver un compte <span class="text-warning">super administrateur</span>.</span>
+			</div>
+			<div class="text-center bg-success" th:if="${addrole == true}" style="color:white">
+				<span class="fa fa-check"></span><span> Le rôle a été ajouté avec succès.</span>
+			</div>
+			<div class="text-center bg-warning" th:if="${notaddrole == true}" style="color:black; font-weight: bolder">
+				<span class="fa fa-exclamation-triangle"></span><span> Cet utilisateur possède déja ce rôle.</span>
+			</div>
+			<div class="table-responsive">
+				<table class="table table-bordered">
+					<tr class="text-center">
+						<th>ID</th>
+						<th>Username</th>
+						<th>
+							Roles (<span style="color:royalblue; text-decoration:underline">
+										pour enlever un rôle à l'utilisateur cliquez juste sur celui-ci
+								   </span>)
+						</th>
+						<th>
+							Etat
+						</th>
+						<th colspan="2">Actions</th>
+					</tr>
+					<tr class="text-center" th:each="user:${users.content}" th:if="${users.totalElements > 0}">
+						<td th:text="${user.getId()}"></td>
+						<td th:text="${user.getUsername()}"></td>
+						<td>
+							[--<span th:each="r:${user.getRoles()}">
+								 <a  class="badge badge-secondary" 
+									th:href="@{/suppUserRole(user_id=${user.getId()},role_id=${r.getId()})}"
+									data-toggle="tooltip" data-placement="left" title="Pour l'enlever le rôle cliquez dessus"
+									>			
+									<span th:text="${r.getRole()}"></span>
+								</a> --								
+							</span>]
+							<span>
+								<a class="badge badge-info" href="" data-toggle="modal" data-target="#addRole" th:attrappend="data-target=${user.getId()}">
+									Ajouter un rôle
+								</a>
+							</span>
+							<!-- The Modal -->
+							<div class="modal fade" id="addRole" th:attrappend="id=${user.getId()}">
+							  <div class="modal-dialog modal-lg">
+							    <div class="modal-content">
+							
+							      <!-- Modal Header -->
+							      <div class="modal-header text-center">
+							        <h4 class="modal-title">Ajouter un rôle</h4>
+							        <button type="button" class="close" data-dismiss="modal">&times;</button>
+							      </div>
+							
+							      <!-- Modal body -->
+							      <form th:action="@{/addRoles}" method="POST">
+								      <div class="modal-body">
+									        <div class="row">
+												<div class="col-md-8 offset-md-2">
+													<div class="form-group text-center">
+								                        <label class="control-label">
+								                        	<h1><span>Ajouter un nouveau rôle à </span><span class="text-info" th:text="${user.getUsername()}"></span></h1>
+								                        </label>
+								                       	<input type="hidden" name="user_id" th:value="${user.getId()}">
+								                    </div>
+								                    <div class="form-group">
+								                        <label class="control-label">Roles</label>
+								                        <select name="roles_id" class="form-control text-center">
+								                            <option th:each="role:${roles}" th:value="${role.getId()}" th:text="${role.getRole()}"></option>
+								                        </select>
+								                    </div>
+								                    <div class="form-group text-center">
+								                        <button type="submit" name="ajouter" class="btn btn-primary">
+								                        	<span class="fa fa-plus"></span> Ajouter
+								                        </button>
+								                    </div>
+												</div>
+											</div>
+								      </div>
+							      </form>
+							
+							    </div>
+							  </div>
+							</div>
+						</td>
+						<td th:if="${user.isActive() == false}">
+							<form th:action="@{/activateUser}" method="post">
+								<div class="form-group text-center">
+			                       	<input type="hidden" name="id" th:value="${user.getId()}">
+			                       <button type="submit" class="btn btn-warning">
+			                        	 Désactivé
+			                        </button>
+			                    </div>
+							</form>
+						</td>
+						<td th:if="${user.isActive() == true}">
+							<form th:action="@{/desactivateUser}" method="post">
+								<div class="form-group text-center">
+			                       	<input type="hidden" name="id" th:value="${user.getId()}">
+			                       <button type="submit" class="btn btn-success">
+			                        	 Activé
+			                        </button>
+			                    </div>
+							</form>
+						</td>
+						<td>
+							<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmationSupp" th:attrappend="data-target=${user.getId()}">
+								<span class="fa fa-times-circle"></span> Supprimer
+							</button>	
+							<div class="modal modalSupp fade" id="confirmationSupp" tabindex="-1" role="dialog"  th:attrappend="id=${user.getId()}">
+	                               <div class="modal-dialog modal-dialog" role="document">
+	                                   <div class="modal-content">
+	                                       <div class="modal-header" style="background-color: royalblue">
+	                                           <h4 class="modal-title">Supprimer un utilisateur</h4>
+	                                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	                                       </div>
+	                                       <div class="modal-body">
+	                                           <p>Voulez vous supprimer l'utilisateur <strong><span th:text="${user.getUsername()}" class="text-info"></span></strong>?</p>
+	                                       </div>
+	                                       <div class="modal-footer">
+	                                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	                                           <form th:action="@{/deleteUser}" method="POST">
+												<input type="hidden" name="id" th:value="${user.getId()}">
+												<button class="btn btn-danger" type=submit>
+													<span class="fa fa-times-circle"></span> Supprimer
+												</button>
+											</form>
+	                                       </div>
+	                                   </div>
+	                               </div>
+	                           </div>
+						</td>
+					</tr>
+					<tr th:if="${users.totalElements == 0}">
+						<td colspan="5" class="text-center"><h3 class="text-danger">Aucun résultat trouvé ...</h3></td>
+					</tr>
+				</table>
+			</div>
+			<div>
+				<ul th:if="${users.totalPages > 0}" class="pagination">
+					<li class="page-item" th:classappend="${users.number < 1} ? disabled">
+						<a class="page-link" th:href="@{/users(size=${users.size}, page=${users.number})}"><span class="fa fa-angle-double-left"></span> Previous</a>
+					</li>
+			    	<li th:each="pageNumber : ${pageNumbers}" th:classappend="${pageNumber==users.number + 1} ? active" class="page-item">
+			    		<a th:href="@{/users(size=${users.size}, page=${pageNumber})}"
+				        th:text=${pageNumber} class="page-link">
+			       		</a>
+			    	</li>
+			    	<li class="page-item" th:classappend="${users.totalPages == users.number + 1} ? disabled">
+						<a class="page-link" th:href="@{/users(size=${users.size}, page=${users.number + 2})}">Next <span class="fa fa-angle-double-right"></span></a>
+					</li> 
+				</ul>
+				<ul class="pagination justify-content-end">
+				  <li class="page-item">
+				  	<a class="btn" style="background-color: purple; color:white" th:href="@{/formAddUser}">
+						<span class="fa fa-plus"></span> Ajouter un nouveau utilisateur
+					</a>
+				  </li>
+				</ul>		
+			</div>
+		</div>
+	</div>
+</div>
+<div th:replace="commons/footer::body-common-scripts"></div>
+<script type="text/javascript">
+	$(document).ready(function(){
+	    $('[data-toggle="tooltip"]').tooltip({title: "Hooray!", animation: true});  
+	});
+</script>
+</body>
+</html>

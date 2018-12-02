@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:insert="commons/header::common-header"/>
+<body>
+<div class="container">
+	<div class="row">
+		<div class="col-md-8 offset-md-2">
+			<div th:insert="commons/header::myheader"></div>
+			<h1 class="grand-titre">Enregistrer un domaine médical</h1>
+			<form th:action="@{/addSpecialite}" method="POST">
+				<div class="form-group">
+					<label class="control-label">Nom de la spécialité</label>
+					<input type="text" name="nom" th:value=${specialite.getNom()} class="form-control">
+					<span class="text-center text-danger" th:errors="${specialite.nom}"></span>
+				</div>
+				<div class="form-group">
+					<label class="control-label">Description de la spécialité</label>
+					<textarea rows="10" cols="15" name="desription" th:value="${specialite.getDesription()}" id="description">
+					</textarea>
+					<span class="text-center text-danger" th:errors="${specialite.desription}"></span>
+				</div>
+				<div class="form-group">
+					<button type="submit" class="btn" style="background-color: purple; color:white"><span class="fa fa-plus-circle"></span> Ajouter</button>
+					<a th:href="@{/specialites}">Retour à la liste des domaines</a>
+				</div>
+			</form>
+		</div>
+	</div>
+	<script>
+        ClassicEditor
+            .create( document.querySelector( '#description' ) )
+            .catch( error => {
+                console.error( error );
+            } );
+    </script>
+</div>
+</body>
+</html>

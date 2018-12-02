@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:fragment="common-header">
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{css/bootstrap-select.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.css}">
+    <link rel="stylesheet" th:href="@{/css/cubeloading.css}">
+    <script th:src="@{js/ckeditor.js}"></script>
+    <style type="text/css">
+    	
+		.scrollup {
+			width: 40px;
+			height: 40px;
+			position: fixed;
+			bottom: 10px;
+			right: 10px;
+			display: none;
+			color: royalblue;
+			background-color: #3a3f51;
+			border: 1px solid #3a3f51;
+			font-size: 20px;
+			text-align: center;
+			line-height: 37px;
+			z-index : 3;
+		} 
+		.scrollup:hover {
+			color: white;
+		}
+		
+    	.maincompte:hover .maincompte-menu {
+		    display: block;
+		    width:100%;
+		    margin-top: 0;
+		 } 
+		 
+		 .name-user{
+		 	font-weight: bolder;
+		 	color: maroon;
+		 }
+		 .maincompte:hover{
+		 	background-color:green
+		 }
+		 .dropdown-item{
+		 	background-color:#80D0D0
+		 }
+		 .dropdown-item:hover{
+		 	background-color : #26619C;
+		 	color:white
+		 }
+		 .detail{
+		 	color:#006400;
+		 	font-weight:bolder;
+		 }
+		 .competence:hover{
+		 	cursor: pointer;
+		 	color:#006400;
+		 }
+		 
+		 body{
+		 	background-color:#DDD5D2;
+		 }
+		 
+		 .grand-titre{
+		 	background-color:#BBAA8F;
+		 }
+		 
+		 #page-effect{
+		 	display:none;
+		 }
+		 #loader{
+		 	margin-top: 50vh; /* poussé de la moitié de hauteur de viewport */
+  			transform: translateY(-50%); /* tiré de la moitié de sa propre hauteur */
+		 }
+		 
+		 /* #loader{
+			 z-index:999999;
+			 display:block;
+			 position:fixed;
+			 top:0;
+			 left:0;
+			 width:100%;
+			 height:100%;
+			 background:url(../images/loader.gif) 50% 50% no-repeat #cccccc;
+		} */
+    </style>
+</head>
+<body>
+	<div th:fragment="myheaderprincipal" style="margin-top:25px;border-radius:25px;" class=" bg-dark">
+		<div class="row">
+			<div class="col-md-3 col-sm-2 col-xm-12 text-center">
+				<a th:href="@{/menuPrincipal}" class="btn btn-info btn-lg">
+					<span class="fa fa-home"></span> Home
+				</a>
+			</div>
+			<div class="offset-md-1 offset-sm-0 offset-xs-0">
+			
+			</div>
+			<div class="col-md-8 col-sm-10 col-xm-12 text-right">
+			  	<div sec:authorize="isAuthenticated()" style="color:white;" class="row"> 		
+	                <div class="col-md-5 text-center">
+	                	<div class="dropdown maincompte">
+	                		<div 
+			                class="text-warning font-weight-bold btn btn-lg dropdown-toggle" style="background-color:green"
+			                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+			                >
+			                	<span class="fa fa-user"></span> <span  sec:authentication="name"></span>
+			                </div>
+			                <div class="dropdown-menu maincompte-menu" aria-labelledby="dropdownMenuButton">
+							   <a class="dropdown-item" th:href="@{/formModifUser}">Modifier mon compte</a>
+							 </div>
+	                	</div>
+	                </div>
+	                 <div class="col-md-7 text-center">
+	                 	<a th:href="@{/logout}" class="btn btn-danger btn-lg">
+		                	<span class="fa fa-bolt"></span> Déconnexion
+		                </a>
+	                 </div>
+	            </div>
+			</div>
+		</div>
+	</div>
+	
+	<div th:fragment="myheader" style="margin-top:25px;border-radius:25px;" class=" bg-dark">
+		<div class="row">
+			<div class="col-md-3 col-sm-2 col-xm-12 text-center">
+				<a th:href="@{/menuPrincipal}" class="btn btn-info">
+					<span class="fa fa-home"></span> Home
+				</a>
+			</div>
+			<div class="offset-md-1 offset-sm-0 offset-xs-0">
+			
+			</div>
+			<div class="col-md-8 col-sm-10 col-xm-12 text-right">
+			  	<div sec:authorize="isAuthenticated()" style="color:white;" class="row"> 		
+	                <div class="col-md-5 text-center">
+	                	<div class="dropdown maincompte">
+	                		<div 
+			                class="text-warning font-weight-bold btn dropdown-toggle" style="background-color:green"
+			                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+			                >
+			                	<span class="fa fa-user"></span> <span  sec:authentication="name"></span>
+			                </div>
+			                <div class="dropdown-menu maincompte-menu" aria-labelledby="dropdownMenuButton">
+							   <a class="dropdown-item" th:href="@{/formModifUser}">Modifier mon compte</a>
+							 </div>
+	                	</div>
+	                </div>
+	                 <div class="col-md-7 text-center">
+	                 	<a th:href="@{/logout}" class="btn btn-danger">
+		                	<span class="fa fa-bolt"></span> Déconnexion
+		                </a>
+	                 </div>
+	            </div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
