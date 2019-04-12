@@ -1,101 +1,116 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:insert="commons/header::common-header"/>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="commons/header::common-header"></head>
 <body>
 <div class="container">
-	<div class="row">
-		<div class="col-md-10 offset-md-1">
-		<div th:insert="commons/header::myheaderprincipal"></div>
-			<h1 class="text-center grand-titre">La liste des créneaux horaires  (<span th:text="${creneaux.totalElements}" style="color:royalblue"></span>) 
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div th:insert="commons/header::myheaderprincipal"></div>
+            <h1 class="text-center grand-titre">La liste des créneaux horaires (<span
+                    th:text="${creneaux.totalElements}" style="color:royalblue"></span>)
             </h1>
-			<nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top text-center">
-			  	<form class="form-inline" th:action="@{/creneaux}" method="get">
-				    <select name="matricule" class="selectpicker"
-					data-live-search="true">	
-						<option th:each="m:${medecins}" th:selected="${m.getMatricule()==motcle}" th:value="${m.getMatricule()}" th:text="${m.getNom()}+' '+${m.getPrenom()}">
-						</option>
-					</select>
-				    <button class="btn btn-success" type="submit">Rechercher par médecin</button>
-				 </form>
-			</nav>
-			<div class="table-responsive">
-				<table class="table table-bordered">
-					<tr>
-						<th>ID</th>
-						<th>Debut</th>
-						<th>Fin</th>
-						<th>Médecin</th>
-						<th colspan="2">Actions</th>
-					</tr>
-					<tr th:each="creneau:${creneaux.content}" th:if="${creneaux.totalElements > 0}">
-						<td th:text="${creneau.getId()}"></td>
-						<td th:text="${creneau.getHdebut()}+' : '+${creneau.getMdebut()}"></td>
-						<td th:text="${creneau.getHfin()}+' : '+${creneau.getMfin()}"></td>
-						<td th:text="${creneau.getMedecin().getNom()}+' '+${creneau.getMedecin().getPrenom()}"></td>
-						<td><a th:href="@{/formModifCreneau(id=${creneau.getId()})}" class="btn btn-info"><span class="fa fa-edit"></span> Modifier</a></td>
-						<td>
-							<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmationSupp" th:attrappend="data-target=${creneau.getId()}">
-								<span class="fa fa-times-circle"></span> Supprimer
-							</button>	
-							<div class="modal modalSupp fade" id="confirmationSupp" tabindex="-1" role="dialog"  th:attrappend="id=${creneau.getId()}">
-	                               <div class="modal-dialog modal-dialog" role="document">
-	                                   <div class="modal-content">
-	                                       <div class="modal-header" style="background-color: royalblue">
-	                                           <h4 class="modal-title">Supprimer un creneau</h4>
-	                                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	                                       </div>
-	                                       <div class="modal-body">
-	                                           <p>Voulez vous supprimer le creneau <strong><span th:text="${creneau.getId()}" class="text-info"></span></strong>?</p>
-	                                       </div>
-	                                       <div class="modal-footer">
-	                                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	                                           <form th:action="@{/deleteCreneau}" method="POST">
-												<input type="hidden" name="id" th:value="${creneau.getId()}">
-												<button class="btn btn-danger" type=submit>
-													<span class="fa fa-times-circle"></span> Supprimer
-												</button>
-											</form>
-	                                       </div>
-	                                   </div>
-	                               </div>
-	                           </div>
-						</td>
-					</tr>
-					<tr th:if="${creneaux.totalElements == 0}">
-						<td colspan="5" class="text-center"><h3 class="text-danger">Aucun résultat trouvé ...</h3></td>
-					</tr>
-				</table>
-			</div>
-			<div>
-				<ul th:if="${creneaux.totalPages > 0}" class="pagination">
-					<li class="page-item" th:classappend="${creneaux.number < 1} ? disabled">
-						<a class="page-link" th:href="@{/creneaux(size=${creneaux.size}, page=${creneaux.number})}"><span class="fa fa-angle-double-left"></span> Previous</a>
-					</li>
-			    	<li th:each="pageNumber : ${pageNumbers}" th:classappend="${pageNumber==creneaux.number + 1} ? active" class="page-item">
-			    		<a th:href="@{/creneaux(size=${creneaux.size}, page=${pageNumber})}"
-				        th:text=${pageNumber} class="page-link">
-			       		</a>
-			    	</li>
-			    	<li class="page-item" th:classappend="${creneaux.totalPages == creneaux.number + 1} ? disabled">
-						<a class="page-link" th:href="@{/creneaux(size=${creneaux.size}, page=${creneaux.number + 2})}">Next <span class="fa fa-angle-double-right"></span></a>
-					</li> 
-				</ul>
-				<ul class="pagination justify-content-end">
-				  <li class="page-item">
-				  	<a class="btn" style="background-color: purple; color:white" th:href="@{/formAddCreneau}">
-						<span class="fa fa-plus"></span> Ajouter un nouveau créneau
-					</a>
-				  </li>
-				</ul>		
-			</div>
-		</div>
-	</div>
+            <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top text-center">
+                <form class="form-inline" th:action="@{/creneaux}" method="get">
+                    <select name="matricule" class="selectpicker"
+                            data-live-search="true">
+                        <option th:each="m:${medecins}" th:selected="${m.getMatricule()==motcle}"
+                                th:value="${m.getMatricule()}" th:text="${m.getNom()}+' '+${m.getPrenom()}">
+                        </option>
+                    </select>
+                    <button class="btn btn-success" type="submit">
+                        <span class="fa fa-search-minus"></span>  Rechercher par médecin
+                    </button>
+                </form>
+            </nav>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>ID</th>
+                        <th>Debut</th>
+                        <th>Fin</th>
+                        <th>Médecin</th>
+                        <th colspan="2">Actions</th>
+                    </tr>
+                    <tr th:each="creneau:${creneaux.content}" th:if="${creneaux.totalElements > 0}">
+                        <td th:text="${creneau.getId()}"></td>
+                        <td th:text="${creneau.getHdebut()}+' : '+${creneau.getMdebut()}"></td>
+                        <td th:text="${creneau.getHfin()}+' : '+${creneau.getMfin()}"></td>
+                        <td th:text="${creneau.getMedecin().getNom()}+' '+${creneau.getMedecin().getPrenom()}"></td>
+                        <td><a th:href="@{/formModifCreneau(id=${creneau.getId()})}" class="btn btn-info"><span
+                                class="fa fa-edit"></span> Modifier</a></td>
+                        <td>
+                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                    data-target="#confirmationSupp" th:attrappend="data-target=${creneau.getId()}">
+                                <span class="fa fa-times-circle"></span> Supprimer
+                            </button>
+                            <div class="modal modalSupp fade" id="confirmationSupp" tabindex="-1" role="dialog"
+                                 th:attrappend="id=${creneau.getId()}">
+                                <div class="modal-dialog modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background-color: royalblue">
+                                            <h4 class="modal-title">Supprimer un creneau</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                &times;
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Voulez vous supprimer le creneau <strong><span
+                                                    th:text="${creneau.getId()}" class="text-info"></span></strong>?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                            </button>
+                                            <form th:action="@{/deleteCreneau}" method="POST">
+                                                <input type="hidden" name="id" th:value="${creneau.getId()}">
+                                                <button class="btn btn-danger" type=submit>
+                                                    <span class="fa fa-times-circle"></span> Supprimer
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${creneaux.totalElements == 0}">
+                        <td colspan="5" class="text-center"><h3 class="text-danger">Aucun résultat trouvé ...</h3></td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <ul th:if="${creneaux.totalPages > 0}" class="pagination">
+                    <li class="page-item" th:classappend="${creneaux.number < 1} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/creneaux(size=${creneaux.size}, page=${creneaux.number})}"><span
+                                class="fa fa-angle-double-left"></span> Précédent</a>
+                    </li>
+                    <li th:each="pageNumber : ${pageNumbers}"
+                        th:classappend="${pageNumber==creneaux.number + 1} ? active" class="page-item">
+                        <a th:href="@{/creneaux(size=${creneaux.size}, page=${pageNumber})}"
+                           th:text=${pageNumber} class="page-link">
+                        </a>
+                    </li>
+                    <li class="page-item" th:classappend="${creneaux.totalPages == creneaux.number + 1} ? disabled">
+                        <a class="page-link" th:href="@{/creneaux(size=${creneaux.size}, page=${creneaux.number + 2})}">Suivant
+                            <span class="fa fa-angle-double-right"></span></a>
+                    </li>
+                </ul>
+                <ul class="pagination justify-content-end">
+                    <li class="page-item">
+                        <a class="btn" style="background-color: purple; color:white" th:href="@{/formAddCreneau}">
+                            <span class="fa fa-plus"></span> Ajouter un nouveau créneau
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
 <div th:replace="commons/footer::body-common-scripts"></div>
 <script type="text/javascript">
-$(document).ready(function(){
-	$('.selectpicker').selectpicker();
-});
+    $(document).ready(function () {
+        $('.selectpicker').selectpicker();
+    });
 </script>
 </body>
 </html>

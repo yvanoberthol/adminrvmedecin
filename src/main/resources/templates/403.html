@@ -1,28 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:insert="commons/header::common-header"/>
+<head th:insert="commons/header::common-header"></head>
 <body>
 <div class="container">
-	<div class="row bg-dark" style="margin-top:20px; color:white">
-		<div class="col-xs-12 col-sm-10 col-md-8 offset-sm-1 offset-md-2 text-center">
-			<h1>Problème d'autorisation</h1>
-		</div>
-	</div>
-	
+    <div class="row bg-dark" style="margin-top:20px; color:white">
+        <div class="col-xs-12 col-sm-10 col-md-8 offset-sm-1 offset-md-2 text-center">
+            <h1>Problème d'autorisation</h1>
+        </div>
+    </div>
+
     <div class="row bg-danger" style="margin-top:20px">
-    	<div class="text-center col-md-12">
-    		<h3>
-        		Hello '<span style="color:white">[[${#httpServletRequest.remoteUser}]]</span>', 
+        <div class="text-center col-md-12">
+            <h3>
+                Hello '<span style="color:white">[[${#httpServletRequest.remoteUser}]]</span>',
                 vous n'avez pas le droit d'accéder à cette page.
-        	</h3>
-    	</div>
+            </h3>
+        </div>
     </div>
     <div class="row" style="color:white; margin-top:20px">
-		<div class="col-md-12 text-center">
-			<img class="img-fluid" th:src="@{/imgs/autorisation_interdite.jpg}" style="width:40%">
-		</div>
-	</div>
-	<div th:insert="commons/header::myheader"></div>
+        <div class="col-md-12 text-center">
+            <img class="img-fluid" th:src="@{/imgs/autorisation_interdite.jpg}" style="width:40%">
+        </div>
+    </div>
+    <div th:insert="commons/header::myheader"></div>
 </div>
 </body>
 </html>

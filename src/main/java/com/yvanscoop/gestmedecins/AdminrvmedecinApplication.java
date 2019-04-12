@@ -10,14 +10,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class AdminrvmedecinApplication implements CommandLineRunner {
 
 
-	
-	public static void main(String[] args) {
-		SpringApplication.run(AdminrvmedecinApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(AdminrvmedecinApplication.class, args);
+    }
 
-	@Override
-	public void run(String... args) throws Exception {
-		
-		
-	}
+    @Override
+    public void run(String... args) {
+
+
+    }
 }

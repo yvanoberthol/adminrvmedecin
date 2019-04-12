@@ -1,91 +1,98 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:insert="commons/header::common-header"/>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="commons/header::common-header"></head>
 <body>
 
 <div class="container">
-	<div th:insert="commons/header::myheaderprincipal"></div>
-	<div class="grand-titre row" style="margin-bottom:25px">
-		<div class="text-center" style="font-size:40px; font-weight:bolder">
-			Calcul des ressources humaines de tous les domaines
-		</div>
+    <div th:insert="commons/header::myheaderprincipal"></div>
+    <div class="grand-titre row" style="margin-bottom:25px">
+        <div class="text-center" style="font-size:40px; font-weight:bolder">
+            Calcul des ressources humaines de tous les domaines
+        </div>
     </div>
-	<div class="row">
-       <div class="text-center" id="stat-medecins-domaines" style="height: 400px; width: 100%;">
+    <div class="row">
+        <div class="text-center" id="stat-medecins-domaines" style="height: 400px; width: 100%;">
 
-       </div>
-       <!-- The Modal -->
-				<div class="modal fade" id="listeMedecins" role="dialog">
-				  <div class="modal-dialog modal-lg">
-				    <div class="modal-content">
-				
-				      <!-- Modal Header -->
-				      <div class="modal-header text-center">
-				        <h4 class="modal-title">Liste des médécins de ce domaine</h4>
-				        <button type="button" class="close" data-dismiss="modal">&times;</button>
-				      </div>
-				
-				      <!-- Modal body -->
-				      <div class="modal-body">
-					        <div class="row">
-								<div class="col-md-8 offset-md-2">
-								
-								</div>
-							</div>
-				      </div>
-				
-				      <!-- Modal footer -->
-				      <div class="modal-footer">
-				        <button type="button" class="btn btn-danger" data-dismiss="modal"><span class="fa fa-times-circle"></span> Close</button>
-				      </div>
-	
-				    </div>
-				  </div>
-				</div>
-	</div>
- 	<div class="row">
- 		<ul class="breadcrumb">
-		  <li class="breadcrumb-item"><a th:href="@{/specialites}">Retour à la liste des domaines</a></li>
-		  <li class="breadcrumb-item"><a th:href="@{/medecins}">Retour la liste des médécins</a></li>
-		</ul>
-	</div>
+        </div>
+        <!-- The Modal -->
+        <div class="modal fade" id="listeMedecins" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <!-- Modal Header -->
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title">Liste des médécins de ce domaine</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+
+                    <!-- Modal body -->
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <ul id="content-medecin">
+
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal"><span
+                                class="fa fa-times-circle"></span> Close
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/specialites}">Retour à la liste des domaines</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/medecins}">Retour la liste des médécins</a></li>
+        </ul>
+    </div>
 </div>
-	   
+
 <script th:inline="javascript">
     window.onload = function () {
         var liste = [[${listeSpecialites}]];
         var counts = [[${counts}]];
-        var specialites= [];
+        var specialites = [];
         var minValue = 0;
         var maxValue = 1000;
         //console.log(Integer.MAX_VALUE);
         var i;
-        for (i=0;i<liste.length;i++){
-        	if(counts[i] < maxValue){
-        		maxValue = counts[i];
-        	}
-        	if(counts[i] > minValue){
-        		minValue = counts[i];
-        	} 
+        for (i = 0; i < liste.length; i++) {
+            if (counts[i] < maxValue) {
+                maxValue = counts[i];
+            }
+            if (counts[i] > minValue) {
+                minValue = counts[i];
+            }
         }
         console.log(minValue);
         console.log(maxValue);
-        for (i=0;i<liste.length;i++){
-        	if(counts[i] < minValue && counts[i] > maxValue){
-        		specialites.push({label:liste[i]["nom"], y:counts[i], e:""});
-        	}
-        	
-        	if(counts[i] == minValue){
-        		specialites.push({label:liste[i]["nom"], y:counts[i], e:"plus grand"});
-        	}
-        	
-        	if(counts[i] == maxValue){
-        		specialites.push({label:liste[i]["nom"], y:counts[i], e:"plus petit"});
-        	}  	
+        for (i = 0; i < liste.length; i++) {
+            if (counts[i] < minValue && counts[i] > maxValue) {
+                specialites.push({label: liste[i]["nom"], y: counts[i], e: ""});
+            }
+
+            if (counts[i] == minValue) {
+                specialites.push({label: liste[i]["nom"], y: counts[i], e: "plus grand"});
+            }
+
+            if (counts[i] == maxValue) {
+                specialites.push({label: liste[i]["nom"], y: counts[i], e: "plus petit"});
+            }
         }
-        
+
         console.log(specialites);
 
+
+        // chart
+        var url = "http://localhost:8089/api/stat/specialiteMedecin/";
         var chart = new CanvasJS.Chart("stat-medecins-domaines", {
             animationEnabled: true,
             exportEnabled: true,
@@ -99,7 +106,7 @@
                 includeZero: true
             },
             axisX: {
-                title: "Liste des domaines ("+specialites.length+")"
+                title: "Liste des domaines (" + specialites.length + ")"
             },
             data: [{
                 type: "column",
@@ -107,9 +114,18 @@
                 indexLabelFontColor: "#5A5757",
                 dataPoints: specialites,
                 indexLabel: "{e}",
-                click: function(e){ 
-                	$("#listeMedecins").modal();
-                  },
+                click: function (e) {
+                    //chargement des méddecins dans le modal
+                    $.get( url+e.dataPoint.label, function(data) {
+                       var liste =  $("#listeMedecins").modal().find("#content-medecin").html('');
+                        for (var i=0;i<data.length;i++){
+                            var tab = data[i].split(" ");
+                            var name = tab[1]+" "+tab[2];
+                            liste.append('<li><a href="/detailMedecin?id='+tab[0]+'">'+name+'</a></li>');
+                        }
+
+                    });
+                }
             }]
         });
         chart.render();

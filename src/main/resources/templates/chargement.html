@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:insert="commons/header::common-header"/>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="commons/header::common-header"></head>
 <body>
-	<div id="loader">
-		<div class="thecube">
-			<div class="cube c1"></div>
-			<div class="cube c2"></div>
-			<div class="cube c4"></div>
-			<div class="cube c3"></div>
-		</div>
-		<div class="text-center name-user" style="margin-top: 40px; z-index:40;">
-			<h3 class="text-uppercase" th:text="${#authentication.name}"></h3>
-		</div>
-	</div>
+<div id="loader">
+    <div class="thecube">
+        <div class="cube c1"></div>
+        <div class="cube c2"></div>
+        <div class="cube c4"></div>
+        <div class="cube c3"></div>
+    </div>
+    <div class="text-center name-user" style="margin-top: 40px; z-index:40;">
+        <h3 class="text-uppercase" th:text="${#authentication.name}"></h3>
+    </div>
+</div>
 
-    <div th:replace="commons/footer::body-common-scripts"></div>
+<div th:replace="commons/footer::body-common-scripts"></div>
 </body>
 </html>

@@ -21,60 +21,60 @@ public class PasswordResetToken {
 
     private Date expiryDate;
 
-    public PasswordResetToken(final String token, final Client client){
+    public PasswordResetToken(final String token, final Client client) {
         super();
         this.token = token;
-        this.client =client;
+        this.client = client;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
 
-    private Date calculateExpiryDate(final int expiryTimeInMinutes){
+    public PasswordResetToken() {
+        // TODO Auto-generated constructor stub
+    }
+
+    private Date calculateExpiryDate(final int expiryTimeInMinutes) {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(new Date().getTime());
-        calendar.add(Calendar.MINUTE,expiryTimeInMinutes);
+        calendar.add(Calendar.MINUTE, expiryTimeInMinutes);
         return new Date(calendar.getTime().getTime());
     }
 
-    public void updateToken(final String token){
+    public void updateToken(final String token) {
         this.token = token;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
-    
-    public PasswordResetToken() {
-		// TODO Auto-generated constructor stub
-	}
 
-	public Long getId() {
-		return id;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getToken() {
-		return token;
-	}
+    public String getToken() {
+        return token;
+    }
 
-	public void setToken(String token) {
-		this.token = token;
-	}
+    public void setToken(String token) {
+        this.token = token;
+    }
 
-	public Client getClient() {
-		return client;
-	}
+    public Client getClient() {
+        return client;
+    }
 
-	public void setClient(Client client) {
-		this.client = client;
-	}
+    public void setClient(Client client) {
+        this.client = client;
+    }
 
-	public Date getExpiryDate() {
-		return expiryDate;
-	}
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
 
-	public void setExpiryDate(Date expiryDate) {
-		this.expiryDate = expiryDate;
-	}
-    
-    
+    public void setExpiryDate(Date expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+
 }

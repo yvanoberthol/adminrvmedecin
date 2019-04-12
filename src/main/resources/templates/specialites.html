@@ -1,94 +1,112 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:insert="commons/header::common-header"/>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="commons/header::common-header"></head>
 <body>
 <div class="container">
-	<div class="row">
-		<div class="col-md-10 offset-md-1">
-		<div th:insert="commons/header::myheaderprincipal"></div>
-			<h1 class="text-center grand-titre">La liste des domaines médicaux  (<span th:text="${specialites.totalElements}" style="color:royalblue"></span>) 
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div th:insert="commons/header::myheaderprincipal"></div>
+            <h1 class="text-center grand-titre">La liste des domaines médicaux (<span
+                    th:text="${specialites.totalElements}" style="color:royalblue"></span>)
             </h1>
-			<nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top text-center">
-			  	<form class="form-inline" th:action="@{/specialites}" method="get">
-				    <input class="form-control mr-sm-2" type="text" name="nom" placeholder="Nom du domaine">
-				    <button class="btn btn-success" type="submit">Rechercher</button>
-				 </form>
-			</nav>
-			<div class="table-responsive">
-				<table class="table table-bordered">
-					<tr>
-						<th>ID</th>
-						<th>Nom</th>
-						<th>Description</th>
-						<th colspan="2">Actions</th>
-					</tr>
-					<tr th:each="specialite:${specialites.content}" th:if="${specialites.totalElements > 0}">
-						<td th:text="${specialite.getId()}"></td>
-						<td th:text="${specialite.getNom()}"></td>
-						<td><a th:href="@{/detailSpecialite(id=${specialite.getId()})}" class="btn btn-warning"><span class="fa fa-ellipsis-h"></span> Afficher plus de détails</a></td>
-						<td><a th:href="@{/formModifSpecialite(id=${specialite.getId()})}" class="btn btn-info"><span class="fa fa-edit"></span> Modifier</a></td>
-						<td>
-							<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#confirmationSupp" th:attrappend="data-target=${specialite.getId()}">
-								<span class="fa fa-times-circle"></span> Supprimer
-							</button>	
-							<div class="modal modalSupp fade" id="confirmationSupp" tabindex="-1" role="dialog"  th:attrappend="id=${specialite.getId()}">
-	                               <div class="modal-dialog modal-dialog" role="document">
-	                                   <div class="modal-content">
-	                                       <div class="modal-header" style="background-color: royalblue">
-	                                           <h4 class="modal-title">Supprimer un domaine</h4>
-	                                           <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-	                                       </div>
-	                                       <div class="modal-body">
-	                                           <p>Voulez vous supprimer la spécialité <strong><span th:text="${specialite.getNom()}" class="text-info"></span></strong>?</p>
-	                                       </div>
-	                                       <div class="modal-footer">
-	                                           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-	                                           <form th:action="@{/deleteSpecialite}" method="POST">
-												<input type="hidden" name="id" th:value="${specialite.getId()}">
-												<button class="btn btn-danger" type=submit>
-													<span class="fa fa-times-circle"></span> Supprimer
-												</button>
-											</form>
-	                                       </div>
-	                                   </div>
-	                               </div>
-	                           </div>
-						</td>
-					</tr>
-					<tr th:if="${specialites.totalElements == 0}">
-						<td colspan="5" class="text-center"><h3 class="text-danger">Aucun résultat trouvé ...</h3></td>
-					</tr>
-				</table>
-			</div>
-			<div>
-				<ul th:if="${specialites.totalPages > 0}" class="pagination">
-					<li class="page-item" th:classappend="${specialites.number < 1} ? disabled">
-						<a class="page-link" th:href="@{/specialites(size=${specialites.size}, page=${specialites.number})}"><span class="fa fa-angle-double-left"></span> Previous</a>
-					</li>
-			    	<li th:each="pageNumber : ${pageNumbers}" th:classappend="${pageNumber==specialites.number + 1} ? active" class="page-item">
-			    		<a th:href="@{/specialites(size=${specialites.size}, page=${pageNumber})}"
-				        th:text=${pageNumber} class="page-link">
-			       		</a>
-			    	</li>
-			    	<li class="page-item" th:classappend="${specialites.totalPages == specialites.number + 1} ? disabled">
-						<a class="page-link" th:href="@{/specialites(size=${specialites.size}, page=${specialites.number + 2})}">Next <span class="fa fa-angle-double-right"></span></a>
-					</li> 
-				</ul>
-				<ul class="pagination justify-content-end">
-				  <li class="page-item">
-				  	<a th:href="@{/medecinSpecialiteStat}">
-						Statistique des ressources humaines sur les domaines
-					</a>
-				  </li>
-				  <li class="page-item">
-				  	<a class="btn" style="background-color: purple; color:white" th:href="@{/formAddSpecialite}">
-						<span class="fa fa-plus"></span> Ajouter un nouveau domaine médical
-					</a>
-				  </li>
-				</ul>		
-			</div>
-		</div>
-	</div>
+            <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top text-center">
+                <form class="form-inline" th:action="@{/specialites}" method="get">
+                    <input class="form-control mr-sm-2" type="text" name="nom" placeholder="Nom du domaine">
+                    <button class="btn btn-success" type="submit">
+                        <span class="fa fa-search"></span> Rechercher
+                    </button>
+                </form>
+            </nav>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Description</th>
+                        <th colspan="2">Actions</th>
+                    </tr>
+                    <tr th:each="specialite:${specialites.content}" th:if="${specialites.totalElements > 0}">
+                        <td th:text="${specialite.getId()}"></td>
+                        <td th:text="${specialite.getNom()}"></td>
+                        <td><a th:href="@{/detailSpecialite(id=${specialite.getId()})}" class="btn btn-warning"><span
+                                class="fa fa-ellipsis-h"></span> Afficher plus de détails</a></td>
+                        <td><a th:href="@{/formModifSpecialite(id=${specialite.getId()})}" class="btn btn-info"><span
+                                class="fa fa-edit"></span> Modifier</a></td>
+                        <td>
+                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                    data-target="#confirmationSupp" th:attrappend="data-target=${specialite.getId()}">
+                                <span class="fa fa-times-circle"></span> Supprimer
+                            </button>
+                            <div class="modal modalSupp fade" id="confirmationSupp" tabindex="-1" role="dialog"
+                                 th:attrappend="id=${specialite.getId()}">
+                                <div class="modal-dialog modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header" style="background-color: royalblue">
+                                            <h4 class="modal-title">Supprimer un domaine</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                &times;
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p>Voulez vous supprimer la spécialité <strong><span
+                                                    th:text="${specialite.getNom()}" class="text-info"></span></strong>?
+                                            </p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close
+                                            </button>
+                                            <form th:action="@{/deleteSpecialite}" method="POST">
+                                                <input type="hidden" name="id" th:value="${specialite.getId()}">
+                                                <button class="btn btn-danger" type=submit>
+                                                    <span class="fa fa-times-circle"></span> Supprimer
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${specialites.totalElements == 0}">
+                        <td colspan="5" class="text-center"><h3 class="text-danger">Aucun résultat trouvé ...</h3></td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <ul th:if="${specialites.totalPages > 0}" class="pagination">
+                    <li class="page-item" th:classappend="${specialites.number < 1} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/specialites(size=${specialites.size}, page=${specialites.number})}"><span
+                                class="fa fa-angle-double-left"></span> Précédent</a>
+                    </li>
+                    <li th:each="pageNumber : ${pageNumbers}"
+                        th:classappend="${pageNumber==specialites.number + 1} ? active" class="page-item">
+                        <a th:href="@{/specialites(size=${specialites.size}, page=${pageNumber})}"
+                           th:text=${pageNumber} class="page-link">
+                        </a>
+                    </li>
+                    <li class="page-item"
+                        th:classappend="${specialites.totalPages == specialites.number + 1} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/specialites(size=${specialites.size}, page=${specialites.number + 2})}">Suivant
+                            <span class="fa fa-angle-double-right"></span></a>
+                    </li>
+                </ul>
+                <ul class="pagination justify-content-end">
+                    <li class="page-item">
+                        <a th:href="@{/medecinSpecialiteStat}">
+                            Statistique des ressources humaines sur les domaines
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="btn" style="background-color: purple; color:white" th:href="@{/formAddSpecialite}">
+                            <span class="fa fa-plus"></span> Ajouter un nouveau domaine médical
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
 <div th:replace="commons/footer::body-common-scripts"/>
 </body>

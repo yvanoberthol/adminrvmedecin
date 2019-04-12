@@ -1,131 +1,145 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:insert="commons/header::common-header"/>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="commons/header::common-header"></head>
 <body>
 <div class="container">
-	<div class="row">
-		<div class="col-md-8 offset-md-2 col-sm-12 col-xm-12">
-			<div th:insert="commons/header::myheader"></div>
-			<h1 class="grand-titre">Details sur le médécin <span th:text="${medecin.getNom()}" class="text-info" style="font-weight: bolder"></span></h1>
-			<button type="button" class="btn btn-danger coulisseur" data-toggle="collapse" data-target="#description"><span class="fa fa-minus"></span> Cacher</button> les détails sur le médécin
-			<div id="description" class="collapse" style="border: 2px solid black; margin-top: 20px">
-				<div th:if="${competenceExists == true}" 
-					class="text-center bg-danger font-weight-bold" style="color:white">
-					<span class="fa fa-times-circle"></span> Il posséde déja cette compétence.
-				</div>
-				<div th:if="${competenceAdd == true}" 
-					class="text-center bg-success font-weight-bold" style="color:white">
-					<span class="fa fa-check"></span> une nouvelle compétence lui a été ajoutée.
-				</div>
-				<div th:if="${competenceDelete == true}" 
-					class="text-center bg-danger font-weight-bold" style="color:white">
-					<span class="fa fa-times-circle"></span> une compétence lui a été supprimée.
-				</div>
-				<div class="row">
-					<div class="col-md-5 col-xs-12 text-center">
-						<p style="margin-top: 20px">
-							Matricule: <span class="detail" th:text="${medecin.getMatricule()}"></span>
-						</p>
-						<p>
-							Nom(s): <span class="detail" th:text="${medecin.getNom()}"></span>
-						</p>
-						<p>
-							Prenom(s): <span class="detail" th:text="${medecin.getPrenom()}"></span>
-						</p>
-						<p>
-							DateNaissance: <span class="detail" th:text="${#dates.format(medecin.getDateNaissance(),'dd/MM/yyyy')}"></span>
-						</p>
-					</div>
-					<div class="col-md-0 col-xs-12 col-xs-12" style="border: 2px solid blue;">
-					</div>
-					<div class="col-md-6 col-xs-12 text-center">
-						<p style="margin-top: 20px">
-							<img alt="photo" class="rounded-circle" style="width:200px; height:200px"
-							th:src="@{'/images/medecins/'+${medecin.getId()}+'_'+${medecin.getNom()}+'_'+${medecin.getPrenom()}+'.png'}">
-						</p>
-						<p>
-							Spécialisé en 
-								<form th:action="@{/deleteMedecinSpecialite}" th:each="s:${specialiteParticulieres}" method="POST">					
-									<input type="hidden" name="specialiteName" th:value="${s.getNom()}">
-									<input type="hidden" name="matricule" th:value="${medecin.getMatricule()}">
-									<button 
-										type="submit" class="badge badge-success competence" th:text="${s.getNom()}"
-										data-toggle="tooltip" data-placement="left" title="Pour l'enlever la compétence cliquez dessus"></button>
-								</form>	
-								<span>
-								<a class="badge badge-info" href="" data-toggle="modal" data-target="#addSpecialite" th:attrappend="data-target=${medecin.getId()}">
+    <div class="row">
+        <div class="col-md-8 offset-md-2 col-sm-12 col-xm-12">
+            <div th:insert="commons/header::myheader"></div>
+            <h1 class="grand-titre">Details sur le médécin <span th:text="${medecin.getNom()}" class="text-info"
+                                                                 style="font-weight: bolder"></span></h1>
+            <button type="button" class="btn btn-danger coulisseur" data-toggle="collapse" data-target="#description">
+                <span class="fa fa-minus"></span> Cacher
+            </button>
+            les détails sur le médécin
+            <div id="description" class="collapse" style="border: 2px solid black; margin-top: 20px">
+                <div th:if="${competenceExists == true}"
+                     class="text-center bg-danger font-weight-bold" style="color:white">
+                    <span class="fa fa-times-circle"></span> Il posséde déja cette compétence.
+                </div>
+                <div th:if="${competenceAdd == true}"
+                     class="text-center bg-success font-weight-bold" style="color:white">
+                    <span class="fa fa-check"></span> une nouvelle compétence lui a été ajoutée.
+                </div>
+                <div th:if="${competenceDelete == true}"
+                     class="text-center bg-danger font-weight-bold" style="color:white">
+                    <span class="fa fa-times-circle"></span> une compétence lui a été supprimée.
+                </div>
+                <div class="row">
+                    <div class="col-md-5 col-xs-12 text-center">
+                        <p style="margin-top: 20px">
+                            Matricule: <span class="detail" th:text="${medecin.getMatricule()}"></span>
+                        </p>
+                        <p>
+                            Nom(s): <span class="detail" th:text="${medecin.getNom()}"></span>
+                        </p>
+                        <p>
+                            Prenom(s): <span class="detail" th:text="${medecin.getPrenom()}"></span>
+                        </p>
+                        <p>
+                            DateNaissance: <span class="detail"
+                                                 th:text="${#dates.format(medecin.getDateNaissance(),'dd/MM/yyyy')}"></span>
+                        </p>
+                    </div>
+                    <div class="col-md-0 col-xs-12 col-xs-12" style="border: 2px solid blue;">
+                    </div>
+                    <div class="col-md-6 col-xs-12 text-center">
+                        <p style="margin-top: 20px">
+                            <img alt="photo" class="rounded-circle" style="width:200px; height:200px"
+                                 th:src="@{'/images/medecins/'+${medecin.getId()}+'_'+${medecin.getNom()}+'_'+${medecin.getPrenom()}+'.png'}">
+                        </p>
+                        <p>
+                            Spécialisé en
+                        <form th:action="@{/deleteMedecinSpecialite}" th:each="s:${specialiteParticulieres}"
+                              method="POST">
+                            <input type="hidden" name="specialiteName" th:value="${s.getNom()}">
+                            <input type="hidden" name="matricule" th:value="${medecin.getMatricule()}">
+                            <button
+                                    type="submit" class="badge badge-success competence" th:text="${s.getNom()}"
+                                    data-toggle="tooltip" data-placement="left"
+                                    title="Pour l'enlever la compétence cliquez dessus"></button>
+                        </form>
+                        <span>
+								<a class="badge badge-info" href="" data-toggle="modal" data-target="#addSpecialite"
+                                   th:attrappend="data-target=${medecin.getId()}">
 									+ lui ajouter une compétence
 								</a>
 							</span>
-							<!-- The Modal -->
-							<div class="modal fade" id="addSpecialite" th:attrappend="id=${medecin.getId()}">
-							  <div class="modal-dialog modal-lg">
-							    <div class="modal-content">
-							
-							      <!-- Modal Header -->
-							      <div class="modal-header text-center">
-							        <h4 class="modal-title">Ajouter une compétence</h4>
-							        <button type="button" class="close" data-dismiss="modal">&times;</button>
-							      </div>
-							
-							      <!-- Modal body -->
-							      <form th:action="@{/addMedecinSpecialite}" method="POST">
-								      <div class="modal-body">
-									        <div class="row">
-												<div class="col-md-8 offset-md-2">
-													<div class="form-group text-center">
-								                        <label class="control-label">
-								                        	<h1><span>Ajouter une nouvelle compétence à </span><span class="text-info" th:text="${medecin.getNom()}+' '+${medecin.getPrenom()}"></span></h1>
-								                        </label>
-								                       	<input type="hidden" name="matricule" th:value="${medecin.getMatricule()}">
-								                    </div>
-								                    <div class="form-group">
-								                        <label class="control-label">Domaines:</label>
-								                        <select name="specialiteName" class="form-control text-center">
-								                            <option th:each="s:${specialites}" th:value="${s.getNom()}" th:text="${s.getNom()}"></option>
-								                        </select>
-								                    </div>
-								                    <div class="form-group text-center">
-								                        <button type="submit" name="ajouter" class="btn btn-primary">
-								                        	<span class="fa fa-plus"></span> Ajouter
-								                        </button>
-								                    </div>
-												</div>
-											</div>
-								      </div>
-							      </form>
-							
-							    </div>
-							  </div>
-							</div>
-						</p>
-					</div>
-				</div>
-			</div>
-			<div>
-				<ul class="breadcrumb">
-				  <li class="breadcrumb-item"><a th:href="@{/formModifMedecin(id=${medecin.getId()})}" style="margin-left:40px">Le modifier</a></li>
-				  <li class="breadcrumb-item"><a th:href="@{/medecins}">Retour à la liste des médécins</a></li>
-				</ul>			
-		    </div>
-	     </div>
-	</div>
+                        <!-- The Modal -->
+                        <div class="modal fade" id="addSpecialite" th:attrappend="id=${medecin.getId()}">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+
+                                    <!-- Modal Header -->
+                                    <div class="modal-header text-center">
+                                        <h4 class="modal-title">Ajouter une compétence</h4>
+                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    </div>
+
+                                    <!-- Modal body -->
+                                    <form th:action="@{/addMedecinSpecialite}" method="POST">
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-8 offset-md-2">
+                                                    <div class="form-group text-center">
+                                                        <label class="control-label">
+                                                            <h1><span>Ajouter une nouvelle compétence à </span><span
+                                                                    class="text-info"
+                                                                    th:text="${medecin.getNom()}+' '+${medecin.getPrenom()}"></span>
+                                                            </h1>
+                                                        </label>
+                                                        <input type="hidden" name="matricule"
+                                                               th:value="${medecin.getMatricule()}">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="control-label">Domaines:</label>
+                                                        <select name="specialiteName" class="form-control text-center">
+                                                            <option th:each="s:${specialites}" th:value="${s.getNom()}"
+                                                                    th:text="${s.getNom()}"></option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="form-group text-center">
+                                                        <button type="submit" name="ajouter" class="btn btn-primary">
+                                                            <span class="fa fa-plus"></span> Ajouter
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a th:href="@{/formModifMedecin(id=${medecin.getId()})}"
+                                                   style="margin-left:40px">Le modifier</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/medecins}">Retour à la liste des médécins</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
 <div th:replace="commons/footer::body-common-scripts"></div>
 <script>
 
-$(document).ready(function(){
-	$('[data-toggle="tooltip"]').tooltip({title: "Hooray!", animation: true}); 
-	$("#description").collapse('show');
-	$("#description").on("show.bs.collapse", function(){
-	    $(".coulisseur").html('<span class="fa fa-minus"></span> Cacher');
-	    $(".coulisseur").removeClass("btn-info").addClass("btn-danger");
-	 });
-	 $("#description").on("hide.bs.collapse", function(){
-	    $(".coulisseur").html('<span class="fa fa-plus-circle"></span> Afficher');
-	    $(".coulisseur").removeClass("btn-danger").addClass("btn-info");
-	 });
-});
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip({title: "Hooray!", animation: true});
+        $("#description").collapse('show');
+        $("#description").on("show.bs.collapse", function () {
+            $(".coulisseur").html('<span class="fa fa-minus"></span> Cacher');
+            $(".coulisseur").removeClass("btn-info").addClass("btn-danger");
+        });
+        $("#description").on("hide.bs.collapse", function () {
+            $(".coulisseur").html('<span class="fa fa-plus-circle"></span> Afficher');
+            $(".coulisseur").removeClass("btn-danger").addClass("btn-info");
+        });
+    });
 </script>
 </body>
 </html>

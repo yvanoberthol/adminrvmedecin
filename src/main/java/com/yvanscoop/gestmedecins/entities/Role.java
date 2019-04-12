@@ -13,11 +13,12 @@ public class Role {
     private long id;
 
     @NotNull(message = "entrez un role")
-    @Size(min = 4,max = 10, message = "le role doit etre de 4 à 10 caracteres")
+    @Size(min = 4, max = 10, message = "le role doit etre de 4 à 10 caracteres")
     @Column(unique = true)
     private String role;
 
-    public Role() { }
+    public Role() {
+    }
 
     public Role(String role) {
         this.role = role;

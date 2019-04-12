@@ -7,18 +7,18 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "users")
-public class User{
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @NotEmpty(message = "entrez le nom de l'utilisateur.")
-    @Size(min = 4,max = 20, message = "le nom doit etre de 4 à 20 caracteres.")
+    @Size(min = 4, max = 20, message = "le nom doit etre de 4 à 20 caracteres.")
     @Column(unique = true)
     private String username;
 
     @NotEmpty(message = "entrez un mot de passe.")
-    @Size(min = 8,max = 255, message = "le mot de passe doit être au moins de 8 caractères.")
+    @Size(min = 8, max = 255, message = "le mot de passe doit être au moins de 8 caractères.")
     private String password;
 
     private boolean active;

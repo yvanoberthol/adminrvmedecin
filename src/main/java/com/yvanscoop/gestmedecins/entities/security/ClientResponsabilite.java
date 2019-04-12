@@ -20,37 +20,37 @@ public class ClientResponsabilite {
 
 
     public ClientResponsabilite() {
-		// TODO Auto-generated constructor stub
-	}
+        // TODO Auto-generated constructor stub
+    }
 
-    public ClientResponsabilite(Client client,Responsabilite responsabilite){
+    public ClientResponsabilite(Client client, Responsabilite responsabilite) {
         this.client = client;
         this.responsabilite = responsabilite;
     }
 
-	public Long getClientResponsabiliteId() {
-		return clientResponsabiliteId;
-	}
+    public Long getClientResponsabiliteId() {
+        return clientResponsabiliteId;
+    }
 
-	public void setClientResponsabiliteId(Long clientResponsabiliteId) {
-		this.clientResponsabiliteId = clientResponsabiliteId;
-	}
+    public void setClientResponsabiliteId(Long clientResponsabiliteId) {
+        this.clientResponsabiliteId = clientResponsabiliteId;
+    }
 
-	public Client getClient() {
-		return client;
-	}
+    public Client getClient() {
+        return client;
+    }
 
-	public void setClient(Client client) {
-		this.client = client;
-	}
+    public void setClient(Client client) {
+        this.client = client;
+    }
 
-	public Responsabilite getResponsabilite() {
-		return responsabilite;
-	}
+    public Responsabilite getResponsabilite() {
+        return responsabilite;
+    }
 
-	public void setResponsabilite(Responsabilite responsabilite) {
-		this.responsabilite = responsabilite;
-	}
-    
-    
+    public void setResponsabilite(Responsabilite responsabilite) {
+        this.responsabilite = responsabilite;
+    }
+
+
 }

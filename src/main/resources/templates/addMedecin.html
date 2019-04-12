@@ -1,70 +1,73 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:insert="commons/header::common-header"/>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="commons/header::common-header"></head>
 <body>
 <div class="container">
-	<div class="row">
-		<div class="col-md-8 offset-md-2">
-			<div th:insert="commons/header::myheader"></div>
-			<h1 class="grand-titre">Enregistrer un nouveau médécin</h1>
-			<div th:if="${medecinExists == true}" 
-				class="text-center bg-danger font-weight-bold" style="color:white">
-				<span class="fa fa-times-circle"></span> ce matricule est déjà pris.
-			</div>
-			<form th:action="@{/addMedecin}" method="POST" enctype="multipart/form-data">
-				<div class="form-group">
-					<label class="control-label">Matricule:</label>
-					<input type="text" name="matricule" th:value=${medecin.getMatricule()} class="form-control">	
-					<span class="text-center text-danger" th:errors="${medecin.matricule}"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label">Nom:</label>
-					<input type="text" name="nom" th:value=${medecin.getNom()} class="form-control">
-					<span class="text-center text-danger" th:errors="${medecin.nom}"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label">Prénom:</label>
-					<input type="text" name="prenom" th:value=${medecin.getPrenom()} class="form-control">	
-					<span class="text-center text-danger" th:errors="${medecin.prenom}"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label">Date de naissance:</label>
-					<input type="date" name="dateNaissance" th:value=${medecin.getDateNaissance()} class="form-control">	
-					<span class="text-center text-danger" th:errors="${medecin.dateNaissance}"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label">Photo:</label>
-					<input type="file" name="photo" 
-					th:value=${medecin.getPhoto()} class="form-control" accept="image/x-png,image/png,image/jpeg">
-					<span class="text-center text-danger" th:if="${medecinPhotoEmpty == true}">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div th:insert="commons/header::myheader"></div>
+            <h1 class="grand-titre">Enregistrer un nouveau médécin</h1>
+            <div th:if="${medecinExists == true}"
+                 class="text-center bg-danger font-weight-bold" style="color:white">
+                <span class="fa fa-times-circle"></span> ce matricule est déjà pris.
+            </div>
+            <form th:action="@{/addMedecin}" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label class="control-label">Matricule:</label>
+                    <input type="text" name="matricule" th:value=${medecin.getMatricule()} class="form-control">
+                    <span class="text-center text-danger" th:errors="${medecin.matricule}"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Nom:</label>
+                    <input type="text" name="nom" th:value=${medecin.getNom()} class="form-control">
+                    <span class="text-center text-danger" th:errors="${medecin.nom}"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Prénom:</label>
+                    <input type="text" name="prenom" th:value=${medecin.getPrenom()} class="form-control">
+                    <span class="text-center text-danger" th:errors="${medecin.prenom}"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Date de naissance:</label>
+                    <input type="date" name="dateNaissance" th:value=${medecin.getDateNaissance()} class="form-control">
+                    <span class="text-center text-danger" th:errors="${medecin.dateNaissance}"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Photo:</label>
+                    <input type="file" name="photo"
+                           th:value=${medecin.getPhoto()} class="form-control"
+                           accept="image/x-png,image/png,image/jpeg">
+                    <span class="text-center text-danger" th:if="${medecinPhotoEmpty == true}">
 						Entrez une photo pour ce médécin
-					</span>	
-				</div>
-				<div class="form-group">
-					<label class="control-label">Domaines:</label>
-					<select name="specialites" class="form-control selectpicker"
-					 multiple data-live-search="true" data-max-options="5">	
-					 	<option hidden="hidden" selected th:value="'vide'" style="display:none"></option>
-						<option th:each="s:${specialites}" th:value="${s.getNom()}" th:text="${s.getNom()}">
-						</option>
-					</select>
-					<span class="text-center text-danger" th:if="${medecinSpecialitesEmpty == true}">
+					</span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Domaines:</label>
+                    <select name="specialites" class="form-control selectpicker"
+                            multiple data-live-search="true" data-max-options="5">
+                        <option hidden="hidden" selected th:value="'vide'" style="display:none"></option>
+                        <option th:each="s:${specialites}" th:value="${s.getNom()}" th:text="${s.getNom()}">
+                        </option>
+                    </select>
+                    <span class="text-center text-danger" th:if="${medecinSpecialitesEmpty == true}">
 						sélectionnez au moins un domaine dans lequel il est spécialisé
 					</span>
-				</div>
-				<div class="form-group">
-					<button type="submit" class="btn" style="background-color: purple; color:white"><span class="fa fa-plus-circle"></span> Ajouter</button>
-					<a th:href="@{/medecins}">Retour à la liste des médécins</a>
-				</div>
-			</form>
-		</div>
-	</div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn" style="background-color: purple; color:white"><span
+                            class="fa fa-plus-circle"></span> Ajouter
+                    </button>
+                    <a th:href="@{/medecins}">Retour à la liste des médécins</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 <div th:replace="commons/footer::body-common-scripts"></div>
 <script type="text/javascript">
-$(document).ready(function(){
-	$('.selectpicker').selectpicker();
-});
+    $(document).ready(function () {
+        $('.selectpicker').selectpicker();
+    });
 </script>
 </body>
 </html>

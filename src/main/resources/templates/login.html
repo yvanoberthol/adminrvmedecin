@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:insert="commons/header::common-header"/>
+<head th:insert="commons/header::common-header"></head>
 <body>
 <div class="container">
-	<div class="row bg-dark" style="margin-top:20px; color:white">
-		<div class="col-xs-12 col-sm-10 col-md-8 offset-sm-1 offset-md-2 text-center">
-			<h1>Administration au cabinet médical</h1>
-		</div>
-	</div>
+    <div class="row bg-dark" style="margin-top:20px; color:white">
+        <div class="col-xs-12 col-sm-10 col-md-8 offset-sm-1 offset-md-2 text-center">
+            <h1>Administration au cabinet médical</h1>
+        </div>
+    </div>
     <div class="row" style="margin-top:20px">
         <div class="col-xs-12 col-sm-8 col-md-6 offset-sm-2 offset-md-3">
             <form th:action="@{/login}" method="post">
@@ -16,7 +16,7 @@
 
                     <div th:if="${param.error}">
                         <div class="alert alert-danger font-weight-bold text-center">
-                            <span class="fa fa-times"></span> Invalid username and password.
+                            <span class="fa fa-times"></span> nom d'utilisateur ou mot de passe incorrect.
                         </div>
                     </div>
                     <div th:if="${param.logout}">
@@ -27,17 +27,17 @@
 
                     <div class="form-group">
                         <input type="text" name="username" id="username" class="form-control input-lg"
-                               placeholder="UserName" required="true" autofocus="true"/>
+                               placeholder="Nom d'utilisateur" required="true" autofocus="true"/>
                     </div>
                     <div class="form-group">
                         <input type="password" name="password" id="password" class="form-control input-lg"
-                               placeholder="Password" required="true"/>
+                               placeholder="Mot de passe" required="true"/>
                     </div>
 
                     <div class="row">
                         <div class="col-xs-6 col-sm-6 col-md-6 offset-md-3">
                             <button type="submit" class="btn btn-lg btn-primary btn-block">
-                            <span class="fa fa-sign-in"></span> Connnexion
+                                <span class="fa fa-sign-in"></span> Connnexion
                             </button>
                         </div>
                     </div>

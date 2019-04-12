@@ -1,38 +1,40 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:insert="commons/header::common-header"/>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="commons/header::common-header"></head>
 <body>
 <div class="container">
-	<div class="row">
-		<div class="col-md-8 offset-md-2">
-			<div th:insert="commons/header::myheader"></div>
-			<h1 class="grand-titre">Enregistrer un nouvel utilisateur</h1>
-			<div th:if="${userExists == true}" 
-				class="text-center bg-danger font-weight-bold" style="color:white">
-				<span class="fa fa-times-circle"></span> ce nom d'utilisateur est déjà pris.
-			</div>
-			<form th:action="@{/addUser}" method="POST">
-				<div class="form-group">
-					<label class="control-label">Username</label>
-					<input type="text" name="username" th:value=${user.getUsername()} class="form-control">
-					<span class="text-center text-danger" th:errors="${user.username}"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label">Password</label>
-					<input type="text" name="password" th:value=${user.getPassword()} class="form-control">	
-					<span class="text-center text-danger" th:errors="${user.password}"></span>
-				</div>
-				<div class="form-check">
-				    <input type="checkbox" class="form-check-input" name="active" id="check">
-				    <label class="form-check-label" for="check">Activé(e)</label>
-				 </div>
-				<div class="form-group">
-					<button type="submit" class="btn" style="background-color: purple; color:white"><span class="fa fa-plus-circle"></span> Ajouter</button>
-					<a th:href="@{/users}">Retour à la liste des utilisateurs</a>
-				</div>
-			</form>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div th:insert="commons/header::myheader"></div>
+            <h1 class="grand-titre">Enregistrer un nouvel utilisateur</h1>
+            <div th:if="${userExists == true}"
+                 class="text-center bg-danger font-weight-bold" style="color:white">
+                <span class="fa fa-times-circle"></span> ce nom d'utilisateur est déjà pris.
+            </div>
+            <form th:action="@{/addUser}" method="POST">
+                <div class="form-group">
+                    <label class="control-label">Username</label>
+                    <input type="text" name="username" th:value=${user.getUsername()} class="form-control">
+                    <span class="text-center text-danger" th:errors="${user.username}"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Password</label>
+                    <input type="text" name="password" th:value=${user.getPassword()} class="form-control">
+                    <span class="text-center text-danger" th:errors="${user.password}"></span>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" name="active" id="check">
+                    <label class="form-check-label" for="check">Activé(e)</label>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn" style="background-color: purple; color:white"><span
+                            class="fa fa-plus-circle"></span> Ajouter
+                    </button>
+                    <a th:href="@{/users}">Retour à la liste des utilisateurs</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 </body>
 </html>

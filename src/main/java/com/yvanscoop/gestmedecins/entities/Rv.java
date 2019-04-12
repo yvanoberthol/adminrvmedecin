@@ -1,75 +1,77 @@
 package com.yvanscoop.gestmedecins.entities;
 
-import java.util.Date;
-
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import com.yvanscoop.gestmedecins.entities.security.Client;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "rv")
-public class Rv{
+public class Rv {
 
-	@Id @GeneratedValue
-	private Long id;
-	// caractéristiques d'un Rv
-	@Temporal(TemporalType.DATE)
-	private Date jour;
+    @Id
+    @GeneratedValue
+    private Long id;
+    // caractéristiques d'un Rv
+    @Temporal(TemporalType.DATE)
+    private Date jour;
 
-	// un rv est lié à un client
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_client")
-	private Client client;
+    // un rv est lié à un client
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_client")
+    private Client client;
 
-	// un rv est lié à un créneau
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_creneau")
-	private Creneau creneau;
+    // un rv est lié à un créneau
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_creneau")
+    private Creneau creneau;
 
-	// constructeur par défaut
-	public Rv() {
-	}
-
-	// avec paramètres
-	public Rv(Date jour, Client client, Creneau creneau) {
-		this.jour = jour;
-		this.client = client;
-		this.creneau = creneau;
-	}
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_specialite")
+    private Specialite specialite;
 
 
-	// getters et setters
+    private Boolean annule = false;
 
-	public Client getClient() {
-		return client;
-	}
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "rv")
+    private TokenRv tokenRv;
 
-	public Date getJour() {
-		return jour;
-	}
+    // constructeur par défaut
+    public Rv() {
+    }
 
-	public void setJour(Date jour) {
-		this.jour = jour;
-	}
+    // avec paramètres
+    public Rv(Date jour, Client client, Creneau creneau) {
+        this.jour = jour;
+        this.client = client;
+        this.creneau = creneau;
+    }
 
-	public void setClient(Client client) {
-		this.client = client;
-	}
 
-	public Creneau getCreneau() {
-		return creneau;
-	}
+    // getters et setters
 
-	public void setCreneau(Creneau creneau) {
-		this.creneau = creneau;
-	}
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
+    }
+
+    public Date getJour() {
+        return jour;
+    }
+
+    public void setJour(Date jour) {
+        this.jour = jour;
+    }
+
+    public Creneau getCreneau() {
+        return creneau;
+    }
+
+    public void setCreneau(Creneau creneau) {
+        this.creneau = creneau;
+    }
 
 }

@@ -1,56 +1,57 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:insert="commons/header::common-header"/>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="commons/header::common-header"></head>
 <body>
 <div class="container">
-	<div class="row">
-		<div class="col-md-8 offset-md-2">
-			<div th:insert="commons/header::myheader"></div>
-			<h1 class="grand-titre">Modifier mon profil</h1>
-			<div th:if="${usernameExists == true}" 
-				class="text-center bg-danger font-weight-bold" style="color:white">
-				<span class="fa fa-times-circle"></span> ce nom d'utilisateur est déjà pris.
-			</div>
-			<div th:if="${passwordIncorrect == true}" 
-				class="text-center bg-danger font-weight-bold" style="color:white">
-				<span class="fa fa-times-circle"></span> ancien mot de passe incorrect.
-			</div>
-			<form th:action="@{/modifUser}" method="POST">
-				<div class="form-group">
-					<input type="hidden" name="id" th:value=${user.getId()}>
-				</div>
-				<div class="form-group">
-					<label class="control-label">Username</label>
-					<input type="text" name="username" th:value=${user.getUsername()} class="form-control">
-					<span class="text-center text-danger" th:errors="${user.username}"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label">Old password</label>
-					<input type="password" name="password" value="" class="form-control">	
-					<span class="text-center text-danger" th:errors="${user.password}"></span>
-				</div>
-				<div class="form-group">
-					<label class="control-label">New password</label>
-					<input type="password" name="newpassword" value="" class="form-control">
-					<span class="text-center text-danger" th:if="${newPasswordEmpty == true}">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div th:insert="commons/header::myheader"></div>
+            <h1 class="grand-titre">Modifier mon profil</h1>
+            <div th:if="${usernameExists == true}"
+                 class="text-center bg-danger font-weight-bold" style="color:white">
+                <span class="fa fa-times-circle"></span> ce nom d'utilisateur est déjà pris.
+            </div>
+            <div th:if="${passwordIncorrect == true}"
+                 class="text-center bg-danger font-weight-bold" style="color:white">
+                <span class="fa fa-times-circle"></span> ancien mot de passe incorrect.
+            </div>
+            <form th:action="@{/modifUser}" method="POST">
+                <div class="form-group">
+                    <input type="hidden" name="id" th:value=${user.getId()}>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Nom d'utilisateur</label>
+                    <input type="text" name="username" th:value=${user.getUsername()} class="form-control">
+                    <span class="text-center text-danger" th:errors="${user.username}"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Ancien mot de passe</label>
+                    <input type="password" name="password" value="" class="form-control">
+                    <span class="text-center text-danger" th:errors="${user.password}"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Nouveau mot de passe</label>
+                    <input type="password" name="newpassword" value="" class="form-control">
+                    <span class="text-center text-danger" th:if="${newPasswordEmpty == true}">
 						Entrez un nouveau mot de passe.
-					</span>	
-					<span class="text-center text-danger" th:if="${newPasswordSize == true}">
+					</span>
+                    <span class="text-center text-danger" th:if="${newPasswordSize == true}">
 						Votre nouveau mot de passe doit être d'au moins 8 caractères.
-					</span>	
-				</div>
-				<div class="form-group">
-					<button type="submit" class="btn btn-info">
-						<span class="fa fa-edit"></span> Modifier
-					</button>
-					
-				</div>
-			</form>
-			<div class="">
-				<h6>Après modification de votre compte vous serez redirigé vers la <span class="text-info">page de connexion</span> pour une prise effective de la modification du compte.</h6>
-			</div>
-		</div>
-	</div>
+					</span>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-info">
+                        <span class="fa fa-edit"></span> Modifier
+                    </button>
+
+                </div>
+            </form>
+            <div class="">
+                <h6>Après modification de votre compte vous serez redirigé vers la <span class="text-info">page de connexion</span>
+                    pour une prise effective de la modification du compte.</h6>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 </html>

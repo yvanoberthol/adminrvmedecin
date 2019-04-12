@@ -25,7 +25,7 @@ public class Client implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id",nullable = false, updatable = false)
+    @Column(name = "id", nullable = false, updatable = false)
     private Long id;
 
     @Column(nullable = false)
@@ -36,27 +36,27 @@ public class Client implements UserDetails {
     private String firstName;
     private String lastName;
 
-    @Column(name = "email",nullable = false)
+    @Column(name = "email", nullable = false)
     private String email;
 
     private String phone;
     private boolean enabled = true;
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "client")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
     private List<Rv> rvs;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
     private Set<ClientResponsabilite> clientResponsabilites = new HashSet<>();
-    
+
     public Client() {
-		// TODO Auto-generated constructor stub
-	}
+        // TODO Auto-generated constructor stub
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>();
-        clientResponsabilites.forEach(cr->authorities.add(new Authotity(cr.getResponsabilite().getName())));
+        clientResponsabilites.forEach(cr -> authorities.add(new Authotity(cr.getResponsabilite().getName())));
         return authorities;
     }
 
@@ -76,8 +76,12 @@ public class Client implements UserDetails {
     }
 
     @Override
-    public boolean isEnabled(){
+    public boolean isEnabled() {
         return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public Long getId() {
@@ -138,16 +142,12 @@ public class Client implements UserDetails {
         this.phone = phone;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
     public Set<ClientResponsabilite> getClientResponsabilites() {
         return clientResponsabilites;
     }
 
-	public List<Rv> getRvs() {
-		return rvs;
-	}
-    
+    public List<Rv> getRvs() {
+        return rvs;
+    }
+
 }

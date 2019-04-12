@@ -1,100 +1,107 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head th:insert="commons/header::common-header"/>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="commons/header::common-header"></head>
 <body>
 <div class="container">
-	<div class="row">
-		<div class="col-md-8 offset-md-2">
-			<div th:insert="commons/header::myheader"></div>
-			<h1 class="grand-titre">Enregistrer un nouveau créneau</h1>
-			<div th:if="${hdebutGrand == true}" 
-				class="text-center bg-danger font-weight-bold" style="color:white">
-				<span class="fa fa-times-circle"></span> L'heure de début doit être inférieur  à l'heure de fin.
-			</div>
-			<div th:if="${hdebutExists == true}" 
-				class="text-center bg-danger font-weight-bold" style="color:white">
-				<span class="fa fa-times-circle"></span> Ce début de créneau existe déja pour ce médécin.
-			</div>
-			<div th:if="${hfinLesshdebut == true}" 
-				class="text-center bg-danger font-weight-bold" style="color:white">
-				<span class="fa fa-times-circle"></span> Il existe déja un créneau qui prend en compte cette intervalle de temps.
-			</div>
-			<div th:if="${hfinExists == true}" 
-				class="text-center bg-danger font-weight-bold" style="color:white">
-				<span class="fa fa-times-circle"></span> Cette fin de créneau existe déja pour ce médécin.
-			</div>
-			<div th:if="${dureeIntervalle == true}" 
-				class="text-center bg-danger font-weight-bold" style="color:white">
-				<span class="fa fa-times-circle"></span> L'intervalle de temps minimum entre Heure de début et l'heure de fin doit être de 20 minutes".
-			</div>
-		
-			<form th:action="@{/addCreneau}" method="POST" style="margin-top:25px">
-				<div class="form-group row">
-					<label class="col-md-3 col-form-label">Heure de début:</label>
-					<div class="col-md-2">
-						<div class="row">
-							<input type="text" name="hdebut" th:value=${creneau.getHdebut()} class="form-control" required>
-						</div>
-						<div class="row text-center">
-							<span class="text-danger" th:errors="${creneau.hdebut}"></span>
-						</div>
-					</div>
-					<label class="col-md-1 col-form-label text-center">:</label>
-					<div class="col-md-2">
-						<div class="row">
-							<input type="text" name="mdebut" th:value=${creneau.getMdebut()} class="form-control" required>
-						</div>
-						<div class="row text-center">
-							<span class="text-danger" th:errors="${creneau.mdebut}"></span>
-						</div>
-					</div>
-					<label class="col-md-2 col-form-label">minutes</label>
-				</div>
-				<div class="form-group row">
-					<label class="col-md-3 col-form-label">Heure de fin:</label>
-					<div class="col-md-2">
-						<div class="row">
-							<input type="text" name="hfin" th:value=${creneau.getHfin()} class="form-control" required>
-						</div>
-						<div class="row text-center">
-							<span class="text-danger" th:errors="${creneau.hfin}"></span>
-						</div>
-					</div>
-					<label class="col-md-1 col-form-label text-center">:</label>
-					<div class="col-md-2">
-						<div class="row">
-							<input type="text" name="mfin" th:value=${creneau.getMfin()} class="form-control" required>
-						</div>
-						<div class="row text-center">
-							<span class="text-danger" th:errors="${creneau.mfin}"></span>
-						</div>
-					</div>
-					<label class="col-md-2 col-form-label">minutes</label>
-						
-					
-				</div>
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div th:insert="commons/header::myheader"></div>
+            <h1 class="grand-titre">Enregistrer un nouveau créneau</h1>
+            <div th:if="${hdebutGrand == true}"
+                 class="text-center bg-danger font-weight-bold" style="color:white">
+                <span class="fa fa-times-circle"></span> L'heure de début doit être inférieur à l'heure de fin.
+            </div>
+            <div th:if="${hdebutExists == true}"
+                 class="text-center bg-danger font-weight-bold" style="color:white">
+                <span class="fa fa-times-circle"></span> Ce début de créneau existe déja pour ce médécin.
+            </div>
+            <div th:if="${hfinLesshdebut == true}"
+                 class="text-center bg-danger font-weight-bold" style="color:white">
+                <span class="fa fa-times-circle"></span> Il existe déja un créneau qui prend en compte cette intervalle
+                de temps.
+            </div>
+            <div th:if="${hfinExists == true}"
+                 class="text-center bg-danger font-weight-bold" style="color:white">
+                <span class="fa fa-times-circle"></span> Cette fin de créneau existe déja pour ce médécin.
+            </div>
+            <div th:if="${dureeIntervalle == true}"
+                 class="text-center bg-danger font-weight-bold" style="color:white">
+                <span class="fa fa-times-circle"></span> L'intervalle de temps minimum entre Heure de début et l'heure
+                de fin doit être de 20 minutes".
+            </div>
 
-				<div class="form-group">
-					<label class="control-label">Médecin:</label>
-					<select name="medecin" class="form-control selectpicker"
-					data-live-search="true">	
-						<option th:each="m:${medecins}" th:value="${m.getId()}" th:text="${m.getNom()}+' '+${m.getPrenom()}">
-						</option>
-					</select>
-				</div>
-				<div class="form-group">
-					<button type="submit" class="btn" style="background-color: purple; color:white"><span class="fa fa-plus-circle"></span> Ajouter</button>
-					<a th:href="@{/creneaux}">Retour à la liste des créneaux</a>
-				</div>
-			</form>
-		</div>
-	</div>
+            <form th:action="@{/addCreneau}" method="POST" style="margin-top:25px">
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Heure de début:</label>
+                    <div class="col-md-2">
+                        <div class="row">
+                            <input type="text" name="hdebut" th:value=${creneau.getHdebut()} class="form-control"
+                                   required>
+                        </div>
+                        <div class="row text-center">
+                            <span class="text-danger" th:errors="${creneau.hdebut}"></span>
+                        </div>
+                    </div>
+                    <label class="col-md-1 col-form-label text-center">:</label>
+                    <div class="col-md-2">
+                        <div class="row">
+                            <input type="text" name="mdebut" th:value=${creneau.getMdebut()} class="form-control"
+                                   required>
+                        </div>
+                        <div class="row text-center">
+                            <span class="text-danger" th:errors="${creneau.mdebut}"></span>
+                        </div>
+                    </div>
+                    <label class="col-md-2 col-form-label">minutes</label>
+                </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label">Heure de fin:</label>
+                    <div class="col-md-2">
+                        <div class="row">
+                            <input type="text" name="hfin" th:value=${creneau.getHfin()} class="form-control" required>
+                        </div>
+                        <div class="row text-center">
+                            <span class="text-danger" th:errors="${creneau.hfin}"></span>
+                        </div>
+                    </div>
+                    <label class="col-md-1 col-form-label text-center">:</label>
+                    <div class="col-md-2">
+                        <div class="row">
+                            <input type="text" name="mfin" th:value=${creneau.getMfin()} class="form-control" required>
+                        </div>
+                        <div class="row text-center">
+                            <span class="text-danger" th:errors="${creneau.mfin}"></span>
+                        </div>
+                    </div>
+                    <label class="col-md-2 col-form-label">minutes</label>
+
+
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label">Médecin:</label>
+                    <select name="medecin" class="form-control selectpicker"
+                            data-live-search="true">
+                        <option th:each="m:${medecins}" th:value="${m.getId()}"
+                                th:text="${m.getNom()}+' '+${m.getPrenom()}">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn" style="background-color: purple; color:white"><span
+                            class="fa fa-plus-circle"></span> Ajouter
+                    </button>
+                    <a th:href="@{/creneaux}">Retour à la liste des créneaux</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 <div th:replace="commons/footer::body-common-scripts"></div>
 <script type="text/javascript">
-$(document).ready(function(){
-	$('.selectpicker').selectpicker();
-});
+    $(document).ready(function () {
+        $('.selectpicker').selectpicker();
+    });
 </script>
 </body>
 </html>
