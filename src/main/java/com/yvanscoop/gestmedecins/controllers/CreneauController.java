@@ -210,7 +210,6 @@ public class CreneauController {
             //on verifie des créneaux avec un debut inferieur à celui de ce médecin
             if (!creneauHDMsupouegalHDAV.isEmpty()) {
                 for (Creneau creneau2 : creneauHDMsupouegalHDAV) {
-                    System.out.println("dans modif creneau 1:" + creneau2.getId());
                     if (!creneau2.getId().equals(creneau.getId())) {
                         if (creneauUpdated.getHdebut() == creneau2.getHfin()) {
                             if (creneauUpdated.getMdebut() <= creneau2.getMfin()) {
@@ -224,7 +223,6 @@ public class CreneauController {
                 }
             }
 
-            System.out.println("dans modif creneau 2:" + creneauHFMinfouegalHDAP.size());
             //on verifie des créneaux avec un debut inferieur à celui de ce médecin
             if (!creneauHFMinfouegalHDAP.isEmpty()) {
                 for (Creneau creneau3 : creneauHFMinfouegalHDAP) {
@@ -245,20 +243,10 @@ public class CreneauController {
 
             // on verifie certaines conditions avant la sauvegarde du creneau
             if (creneauUpdated.getHdebut() < creneauUpdated.getHfin()) {
-                creneau.setHdebut(creneauUpdated.getHdebut());
-                creneau.setHfin(creneauUpdated.getHfin());
-                creneau.setMdebut(creneauUpdated.getMdebut());
-                creneau.setMfin(creneauUpdated.getMfin());
-                creneau.setMedecin(creneauUpdated.getMedecin());
-                creneauService.save(creneau);
+                    save(creneau,creneauUpdated);
             } else if (creneauUpdated.getHdebut() == creneauUpdated.getHfin()) {
                 if ((creneauUpdated.getMdebut() + intervalleCreneau) <= creneauUpdated.getMfin()) {
-                    creneau.setHdebut(creneauUpdated.getHdebut());
-                    creneau.setHfin(creneauUpdated.getHfin());
-                    creneau.setMdebut(creneauUpdated.getMdebut());
-                    creneau.setMfin(creneauUpdated.getMfin());
-                    creneau.setMedecin(creneauUpdated.getMedecin());
-                    creneauService.save(creneau);
+                    save(creneau,creneauUpdated);
                 } else if (creneauUpdated.getMdebut() > creneauUpdated.getMfin()) {
                     model.addAttribute("hdebutGrand", true);
                     model.addAttribute("creneau", creneauUpdated);
@@ -313,5 +301,14 @@ public class CreneauController {
         model.addAttribute("medecins", medecinService.getAll(""));
 
         return "creneaux";
+    }
+
+    private void save(Creneau creneau,Creneau modif){
+        creneau.setHdebut(modif.getHdebut());
+        creneau.setHfin(modif.getHfin());
+        creneau.setMdebut(modif.getMdebut());
+        creneau.setMfin(modif.getMfin());
+        creneau.setMedecin(modif.getMedecin());
+        creneauService.save(creneau);
     }
 }

@@ -8,7 +8,7 @@ public class ClientResponsabilite {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long clientResponsabiliteId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
@@ -28,12 +28,12 @@ public class ClientResponsabilite {
         this.responsabilite = responsabilite;
     }
 
-    public Long getClientResponsabiliteId() {
-        return clientResponsabiliteId;
+    public Long getId() {
+        return id;
     }
 
-    public void setClientResponsabiliteId(Long clientResponsabiliteId) {
-        this.clientResponsabiliteId = clientResponsabiliteId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Client getClient() {

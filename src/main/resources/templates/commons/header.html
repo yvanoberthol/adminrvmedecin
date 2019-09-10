@@ -8,6 +8,7 @@
     <link rel="stylesheet" th:href="@{css/bootstrap-select.css}">
     <link rel="stylesheet" th:href="@{/css/font-awesome.css}">
     <link rel="stylesheet" th:href="@{/css/cubeloading.css}">
+    <link rel="stylesheet" th:href="@{/css/file_style.css}">
     <script th:src="@{js/ckeditor.js}"></script>
     <style type="text/css">
 
@@ -18,7 +19,7 @@
             bottom: 10px;
             right: 10px;
             display: none;
-            color: royalblue;
+            color: #018577;
             background-color: #3a3f51;
             border: 1px solid #3a3f51;
             font-size: 20px;
@@ -28,7 +29,7 @@
         }
 
         .scrollup:hover {
-            color: white;
+            color: #ffc107 !important
         }
 
         .maincompte:hover .maincompte-menu {
@@ -65,12 +66,16 @@
             color: #006400;
         }
 
+        #property{
+            border-right: 5px solid darkgreen
+        }
+
         body {
             background-color: #DDD5D2;
         }
 
         .grand-titre {
-            background-color: #BBAA8F;
+            background-color: #929583
         }
 
         #page-effect {
@@ -80,6 +85,17 @@
         #loader {
             margin-top: 50vh; /* poussé de la moitié de hauteur de viewport */
             transform: translateY(-50%); /* tiré de la moitié de sa propre hauteur */
+        }
+
+        .gris-fond{
+            background-color: #929583
+        }
+
+        .vert-fond{
+            background-color: #018577
+        }
+        .text-vert{
+            color: #018577;
         }
 
         /* #loader{
@@ -95,76 +111,95 @@
     </style>
 </head>
 <body>
-<div th:fragment="myheaderprincipal" style="margin-top:25px;border-radius:25px;" class=" bg-dark">
-    <div class="row">
-        <div class="col-md-3 col-sm-2 col-xm-12 text-center">
-            <a th:href="@{/menuPrincipal}" class="btn btn-info btn-lg">
-                <span class="fa fa-home"></span> Home
-            </a>
-        </div>
-        <div class="offset-md-1 offset-sm-0 offset-xs-0">
-
-        </div>
-        <div class="col-md-8 col-sm-10 col-xm-12 text-right">
-            <div sec:authorize="isAuthenticated()" style="color:white;" class="row">
-                <div class="col-md-5 text-center">
-                    <div class="dropdown maincompte">
-                        <div
-                                class="text-warning font-weight-bold btn btn-lg dropdown-toggle"
-                                style="background-color:green"
-                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false"
-                        >
-                            <span class="fa fa-user"></span> <span sec:authentication="name"></span>
-                        </div>
-                        <div class="dropdown-menu maincompte-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" th:href="@{/formModifUser}">Modifier mon compte</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-7 text-center">
-                    <a th:href="@{/logout}" class="btn btn-danger btn-lg">
-                        <span class="fa fa-bolt"></span> Déconnexion
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div th:fragment="myheader" style="margin-top:25px;border-radius:25px;" class=" bg-dark">
-    <div class="row">
-        <div class="col-md-3 col-sm-2 col-xm-12 text-center">
-            <a th:href="@{/menuPrincipal}" class="btn btn-info">
-                <span class="fa fa-home"></span> Home
-            </a>
-        </div>
-        <div class="offset-md-1 offset-sm-0 offset-xs-0">
+    <div class="row mb-4 mt-2">
+        <nav class="col-md-12 navbar navbar-icon-top navbar-expand-lg navbar-dark bg-secondary p-3">
+            <a class="navbar-brand" th:href="@{/menuPrincipal}"><span class="fa fa-ambulance badge-info text-danger p-3"></span> Gestion du cabinet médical</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-        </div>
-        <div class="col-md-8 col-sm-10 col-xm-12 text-right">
-            <div sec:authorize="isAuthenticated()" style="color:white;" class="row">
-                <div class="col-md-5 text-center">
-                    <div class="dropdown maincompte">
-                        <div
-                                class="text-warning font-weight-bold btn dropdown-toggle" style="background-color:green"
-                                id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false"
-                        >
-                            <span class="fa fa-user"></span> <span sec:authentication="name"></span>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user-o">
+                            </i>
+                            Médécins
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" th:href="@{medecins}">Liste des médécins</a>
+                            <a class="dropdown-item" th:href="@{formAddMedecin}">Ajouter un médécin</a>
                         </div>
-                        <div class="dropdown-menu maincompte-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" th:href="@{/formModifUser}">Modifier mon compte</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-file-zip-o">
+                            </i>
+                            Spécialités
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" th:href="@{specialites}">Liste des spécialités</a>
+                            <a class="dropdown-item" th:href="@{formAddSpecialite}">Ajouter une spécialité</a>
+                            <a class="dropdown-item" th:href="@{/medecinSpecialiteStat}">Statistique sur les spécialités</a>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-7 text-center">
-                    <a th:href="@{/logout}" class="btn btn-danger">
-                        <span class="fa fa-bolt"></span> Déconnexion
-                    </a>
-                </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-hourglass-end">
+                            </i>
+                            Créneaux
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" th:href="@{creneaux}">Liste des créneaux</a>
+                            <a class="dropdown-item" th:href="@{formAddCreneau}">Ajouter un créneau</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" th:href="@{/patients}" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-users">
+                            </i>
+                            Patients
+                        </a>
+                    </li>
+
+                    <li class="nav-item dropdown" sec:authorize="hasRole('ROLE_SUPERADMIN')">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user">
+                            </i>
+                            Users
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" th:href="@{users}">Liste des users</a>
+                            <a class="dropdown-item" th:href="@{formAddUser}">Ajouter un user</a>
+                        </div>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fa fa-user-circle">
+                            </i>
+                            <span th:text="${#authentication.getName()}"></span>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" th:href="@{/formModifUser}">
+                                <i class="fa fa-calculator">
+                                </i>
+                                Mon compte
+                            </a>
+                            <a class="dropdown-item" th:href="@{/logout}">
+                                <i class="fa fa-sign-out">
+                                </i>
+                                Déconnexion
+                            </a>
+                        </div>
+                    </li>
+                </ul>
             </div>
-        </div>
+        </nav>
     </div>
 </div>
 </body>

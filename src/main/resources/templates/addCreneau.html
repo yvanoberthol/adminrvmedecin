@@ -4,8 +4,12 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-md-8 offset-md-2">
+        <div class="col-md-12">
             <div th:insert="commons/header::myheader"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
             <h1 class="grand-titre">Enregistrer un nouveau créneau</h1>
             <div th:if="${hdebutGrand == true}"
                  class="text-center bg-danger font-weight-bold" style="color:white">

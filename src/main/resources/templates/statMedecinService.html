@@ -4,7 +4,11 @@
 <body>
 
 <div class="container">
-    <div th:insert="commons/header::myheaderprincipal"></div>
+    <div class="row">
+        <div class="col-md-12">
+            <div th:insert="commons/header::myheader"></div>
+        </div>
+    </div>
     <div class="grand-titre row" style="margin-bottom:25px">
         <div class="text-center" style="font-size:40px; font-weight:bolder">
             Calcul des ressources humaines de tous les domaines
@@ -63,6 +67,7 @@
         var minValue = 0;
         var maxValue = 1000;
         //console.log(Integer.MAX_VALUE);
+
         var i;
         for (i = 0; i < liste.length; i++) {
             if (counts[i] < maxValue) {
@@ -115,7 +120,7 @@
                 dataPoints: specialites,
                 indexLabel: "{e}",
                 click: function (e) {
-                    //chargement des méddecins dans le modal
+                    //chargement des médecins dans le modal
                     $.get( url+e.dataPoint.label, function(data) {
                        var liste =  $("#listeMedecins").modal().find("#content-medecin").html('');
                         for (var i=0;i<data.length;i++){
@@ -129,7 +134,6 @@
             }]
         });
         chart.render();
-
     }
 </script>
 <div th:replace="commons/footer::body-common-scripts"></div>

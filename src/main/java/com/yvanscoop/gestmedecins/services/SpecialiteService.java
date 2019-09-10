@@ -36,10 +36,7 @@ public class SpecialiteService {
             list = getAll(mot).subList(startItem, toIndex);
         }
 
-        Page<Specialite> specialitePage
-                = new PageImpl<Specialite>(list, PageRequest.of(currentPage, pageSize), getAll(mot).size());
-
-        return specialitePage;
+        return new PageImpl<>(list, PageRequest.of(currentPage, pageSize), getAll(mot).size());
     }
 
     public Specialite getOne(Long id) {

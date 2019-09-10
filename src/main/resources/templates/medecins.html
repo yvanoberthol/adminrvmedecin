@@ -4,10 +4,14 @@
 <body>
 <div class="container">
     <div class="row">
+        <div class="col-md-12">
+            <div th:insert="commons/header::myheader"></div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-10 offset-md-1">
-            <div th:insert="commons/header::myheaderprincipal"></div>
             <h1 class="text-center grand-titre">La liste des médécins (<span th:text="${medecins.totalElements}"
-                                                                             style="color:royalblue"></span>)
+                                                                             class="text-white"></span>)
             </h1>
             <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top text-center">
                 <form class="form-inline" th:action="@{/medecins}" method="get">
@@ -17,26 +21,25 @@
                     </button>
                 </form>
             </nav>
+            <div th:if="${impressionDone == true}"
+                 class="text-center alert alert-success font-weight-bold w-100 mb-1 mt-1">
+                <span class="fa fa-check"></span> Liste des médécins générée avec succès.
+            </div>
             <div class="table-responsive">
                 <table class="table table-bordered">
                     <tr>
                         <th>ID</th>
                         <th>Nom(s) et prénom(s)</th>
                         <th>Description</th>
-                        <th colspan="2">Actions</th>
+                        <th class="font-italic">Total Actif(<span class="text-success" th:text="${medecinActifCount}"></span>)</th>
+                        <th colspan="2" class="text-center">Actions</th>
                     </tr>
                     <tr th:each="medecin:${medecins.content}" th:if="${medecins.totalElements > 0}">
                         <td th:text="${medecin.getId()}"></td>
                         <td th:text="${medecin.getNom()}+' '+${medecin.getPrenom()}"></td>
                         <td>
-                            <a th:href="@{/detailMedecin(id=${medecin.getId()})}" class="btn btn-warning">
+                            <a th:href="@{/detailMedecin(id=${medecin.getId()})}" class="btn btn-secondary">
                                 <span class="fa fa-ellipsis-h"></span> Afficher plus de détails
-                            </a>
-                        </td>
-
-                        <td>
-                            <a th:href="@{/formModifMedecin(id=${medecin.getId()})}" class="btn btn-info">
-                                <span class="fa fa-edit"></span> Modifier
                             </a>
                         </td>
 
@@ -60,6 +63,12 @@
                                     </button>
                                 </div>
                             </form>
+                        </td>
+
+                        <td>
+                            <a th:href="@{/formModifMedecin(id=${medecin.getId()})}" class="btn btn-info">
+                                <span class="fa fa-edit"></span> Modifier
+                            </a>
                         </td>
 
                         <td>
@@ -120,7 +129,14 @@
                             <span class="fa fa-angle-double-right"></span></a>
                     </li>
                 </ul>
-                <ul class="pagination justify-content-end">
+            </div>
+            <div>
+                <ul class="pagination justify-content-center">
+                    <li class="page-item mr-2">
+                        <a class="btn" style="background-color: #608059; color:white" th:href="@{/medecin/imprimer}">
+                            <span class="fa fa-print"></span> Télécharger la liste des médécins
+                        </a>
+                    </li>
                     <li class="page-item">
                         <a class="btn" style="background-color: purple; color:white" th:href="@{/formAddMedecin}">
                             <span class="fa fa-plus"></span> Ajouter un nouveau médécin

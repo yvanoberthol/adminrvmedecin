@@ -24,6 +24,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             "/fonts/**",
             "/imgs/**",
             "/images/**",
+            "/api/rv/**",
+            "/formAddUser",
+            "/addUser",
+            "/addRoles",
+            "/suppUserRole",
+            "/activateUser",
+            "/users",
             "/login"
     };
     @Autowired
@@ -62,4 +69,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);*/
         http.exceptionHandling().accessDeniedPage("/403");
     }
+
 }

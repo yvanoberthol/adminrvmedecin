@@ -4,10 +4,14 @@
 <body>
 <div class="container">
     <div class="row">
+        <div class="col-md-12">
+            <div th:insert="commons/header::myheader"></div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-10 offset-md-1">
-            <div th:insert="commons/header::myheaderprincipal"></div>
             <h1 class="text-center grand-titre">La liste des créneaux horaires (<span
-                    th:text="${creneaux.totalElements}" style="color:royalblue"></span>)
+                    th:text="${creneaux.totalElements}" class="text-white"></span>)
             </h1>
             <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top text-center">
                 <form class="form-inline" th:action="@{/creneaux}" method="get">

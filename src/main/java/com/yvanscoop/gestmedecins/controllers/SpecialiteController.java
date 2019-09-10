@@ -110,7 +110,7 @@ public class SpecialiteController {
         int totalPages = medecinPage.getTotalPages();
         if (currentPageDetail > totalPages) {
             currentPageDetail = 1;
-            medecinPage = new PageImpl<Medecin>(list, pageable, medecins.size());
+            medecinPage = new PageImpl<>(list, pageable, medecins.size());
         }
         if (totalPages > 0) {
             List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
@@ -119,7 +119,6 @@ public class SpecialiteController {
             model.addAttribute("pageNumbers", pageNumbers);
             System.out.println(pageNumbers);
         }
-        System.out.println(medecinPage.getContent());
         model.addAttribute("specialite", specialite);
         model.addAttribute("medecins", medecinPage);
         return "detailSpecialite";

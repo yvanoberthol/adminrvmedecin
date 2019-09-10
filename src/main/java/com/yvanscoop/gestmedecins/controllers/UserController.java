@@ -40,7 +40,7 @@ public class UserController {
     @Autowired
     private RoleService roleService;
 
-    @Secured(value = {"ROLE_SUPERADMIN"})
+    //@Secured(value = {"ROLE_SUPERADMIN"})
     @RequestMapping(value = "/users")
     public String getAllUsers(Model model,
                               @RequestParam("nom") Optional<String> motcle,
@@ -66,7 +66,7 @@ public class UserController {
         return "users";
     }
 
-    @Secured(value = {"ROLE_SUPERADMIN"})
+    //@Secured(value = {"ROLE_SUPERADMIN"})
     @RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
     public String deleteUser(@RequestParam("id") Long id, RedirectAttributes redirectAttribute) {
         User user = userService.getOne(id);
@@ -126,7 +126,7 @@ public class UserController {
         return "modifUser";
     }
 
-    @Secured(value = {"ROLE_SUPERADMIN"})
+    //@Secured(value = {"ROLE_SUPERADMIN"})
     @RequestMapping(value = "/formAddUser")
     public String formAddUser(Model model) {
         model.addAttribute("user", new User());
@@ -136,8 +136,7 @@ public class UserController {
     @RequestMapping(value = "/modifUser", method = RequestMethod.POST)
     public String modifUser(@Valid User userUpdated, BindingResult bindingResult, @RequestParam("newpassword") String newpassword, Model model,
                             HttpSession httpSession) {
-        if (!bindingResult.hasErrors() || newpassword.length() >= 8) {
-            System.out.println(newpassword);
+        if (!bindingResult.hasErrors() && newpassword.length() >= 8) {
             SecurityContext securityContext = (SecurityContext) httpSession.getAttribute("SPRING_SECURITY_CONTEXT");
             String user_current = securityContext.getAuthentication().getName();
             User userByName = userService.getByNom(userUpdated.getUsername());
@@ -174,7 +173,7 @@ public class UserController {
 
     }
 
-    @Secured(value = {"ROLE_SUPERADMIN"})
+    //@Secured(value = {"ROLE_SUPERADMIN"})
     @RequestMapping(value = "/addUser", method = RequestMethod.POST)
     public String addUser(@Valid User useradd, BindingResult bindingResult, Model model) {
 
@@ -196,12 +195,14 @@ public class UserController {
 
             return "redirect:/users";
         } else {
+
+            model.addAttribute("user", useradd);
             return "addUser";
         }
 
     }
 
-    @Secured(value = {"ROLE_SUPERADMIN"})
+    //@Secured(value = {"ROLE_SUPERADMIN"})
     @RequestMapping(value = "/addRoles", method = RequestMethod.POST)
     public String saveUserRole(long user_id, long roles_id, Model model, RedirectAttributes redirectAttribute) {
         User user = userService.getOne(user_id);
@@ -223,6 +224,8 @@ public class UserController {
     public String suppUserRole(@RequestParam("user_id") Long user_id,
                                @RequestParam("role_id") Long role_id, RedirectAttributes redirectAttribute,
                                HttpSession httpSession) {
+
+
         User user = userService.getOne(user_id);
         Role role_define = roleService.getOne(role_id);
         SecurityContext securityContext = (SecurityContext) httpSession.getAttribute("SPRING_SECURITY_CONTEXT");

@@ -6,9 +6,9 @@
 <span sec:authentication="name" id="name-authenticate" style="display:none"></span>
 <div class="container">
     <div class="jumbotron jumbotron-fluid bg-dark"
-         style="margin-top:20px; color:white; border-bottom: 10px solid royalblue">
+         style="margin-top:20px; color:white; border-bottom: 10px solid #018577">
         <div class="container text-center">
-            <h1 style="color:royalblue">Espace d'administration à la gestion de notre cabinet</h1>
+            <h1 class="text-vert">Espace d'administration à la gestion de notre cabinet</h1>
             <p>Organisation et gestion des activités relatives au cabinet médical.</p>
             <h3>
 		    	<span sec:authorize="isAuthenticated()">
@@ -24,8 +24,8 @@
     </div>
     <div class="row">
         <div class="col-xs-12 col-sm-6 col-md-4" style="margin-top:20px">
-            <div class="card">
-                <div class="card-header text-center font-weight-bold bg-info">
+            <div class="card gris-fond">
+                <div class="card-header text-center font-weight-bold vert-fond">
                     Domaines médicaux
                 </div>
                 <div class="card-body text-center">
@@ -34,7 +34,7 @@
                          alt="Spécialité médicale" style="width:200px; height:200px">
                 </div>
                 <div class="card-footer text-center">
-                    <a th:href="@{/specialites}">
+                    <a th:href="@{/specialites}" class="text-white-50">
                         Gestion des différentes spécialités médicales
                     </a>
                 </div>
@@ -42,8 +42,8 @@
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-4" style="margin-top:20px">
-            <div class="card">
-                <div class="card-header text-center font-weight-bold bg-info">
+            <div class="card gris-fond">
+                <div class="card-header text-center font-weight-bold vert-fond">
                     Créneaux Horaires
                 </div>
                 <div class="card-body text-center">
@@ -52,7 +52,7 @@
                          alt="utilisateurs" style="width:200px; height:200px">
                 </div>
                 <div class="card-footer text-center">
-                    <a th:href="@{/creneaux}">
+                    <a th:href="@{/creneaux}" class="text-white-50">
                         Gestion des créneaux horaires des médecins du cabinet médical
                     </a>
                 </div>
@@ -60,8 +60,8 @@
         </div>
 
         <div class="col-xs-12 col-sm-6 col-md-4" style="margin-top:20px">
-            <div class="card">
-                <div class="card-header text-center font-weight-bold bg-info">
+            <div class="card gris-fond">
+                <div class="card-header text-center font-weight-bold vert-fond">
                     Médécins
                 </div>
                 <div class="card-body text-center">
@@ -70,16 +70,34 @@
                          alt="utilisateurs" style="width:200px; height:200px">
                 </div>
                 <div class="card-footer text-center">
-                    <a th:href="@{/medecins}">
+                    <a th:href="@{/medecins}" class="text-white-50">
                         Gestion des médécins du cabinet <br/>médical
                     </a>
                 </div>
             </div>
         </div>
 
+        <div class="col-xs-12 col-sm-6 col-md-4" style="margin-top:20px">
+            <div class="card gris-fond">
+                <div class="card-header text-center font-weight-bold vert-fond">
+                    Patients
+                </div>
+                <div class="card-body text-center">
+                    <img class="card-img-top"
+                         th:src="@{/imgs/patient.jpg}"
+                         alt="patients" style="width:200px; height:200px">
+                </div>
+                <div class="card-footer text-center">
+                    <a th:href="@{/patients}" class="text-white-50">
+                        Consulter la liste des patients
+                    </a>
+                </div>
+            </div>
+        </div>
+
         <div class="col-xs-12 col-sm-6 col-md-4" sec:authorize="hasRole('ROLE_SUPERADMIN')" style="margin-top:20px">
-            <div class="card">
-                <div class="card-header text-center font-weight-bold bg-info">
+            <div class="card gris-fond">
+                <div class="card-header text-center font-weight-bold vert-fond">
                     Utilisateurs
                 </div>
                 <div class="card-body text-center">
@@ -88,7 +106,7 @@
                          alt="utilisateurs" style="width:200px; height:200px">
                 </div>
                 <div class="card-footer text-center">
-                    <a th:href="@{/users}">
+                    <a th:href="@{/users}" class="text-white-50">
                         Gestion des utilisateurs de cette application
                     </a>
                 </div>

@@ -16,17 +16,18 @@ public class SecurityUtility {
         return new BCryptPasswordEncoder(12, new SecureRandom(SALT.getBytes()));
     }
 
-    @Bean
-    public static String randomPassword() {
+
+    public static String randomPassword(int poids) {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();
         Random rnd = new Random();
 
-        while (salt.length() < 18) {
+        while (salt.length() < poids) {
             int index = (int) (rnd.nextFloat() * SALTCHARS.length());
             salt.append(SALTCHARS.charAt(index));
         }
 
         return salt.toString();
     }
+
 }

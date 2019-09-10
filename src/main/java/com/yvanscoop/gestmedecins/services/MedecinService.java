@@ -24,6 +24,11 @@ public class MedecinService {
         return medecinRepository.findByMedecin(mot + "%");
     }
 
+
+    public int countActif(){
+        return medecinRepository.findByMedecinActif().size();
+    }
+
     public Page<Medecin> findPaginated(String mot, Pageable pageable) {
         int pageSize = pageable.getPageSize();
         int currentPage = pageable.getPageNumber();
@@ -37,10 +42,7 @@ public class MedecinService {
             list = getAll(mot).subList(startItem, toIndex);
         }
 
-        Page<Medecin> MedecinPage
-                = new PageImpl<Medecin>(list, PageRequest.of(currentPage, pageSize), getAll(mot).size());
-
-        return MedecinPage;
+        return new PageImpl<>(list, PageRequest.of(currentPage, pageSize), getAll(mot).size());
 
     }
 
@@ -65,11 +67,14 @@ public class MedecinService {
     }
 
     public Medecin getByMatricule(String matricule) {
-        // TODO Auto-generated method stub
         return medecinRepository.findByMatricule(matricule);
     }
 
     public Medecin getByEmail(String email) {
         return medecinRepository.findByEmail(email);
+    }
+
+    public String[] headers(){
+        return medecinRepository.headers();
     }
 }

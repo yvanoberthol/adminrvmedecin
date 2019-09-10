@@ -4,8 +4,12 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-md-8 offset-md-2">
+        <div class="col-md-12">
             <div th:insert="commons/header::myheader"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
             <h1 class="grand-titre">Enregistrer un domaine médical</h1>
             <form th:action="@{/addSpecialite}" method="POST">
                 <div class="form-group">
@@ -15,7 +19,7 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Description de la spécialité</label>
-                    <textarea rows="10" cols="15" name="desription" th:value="${specialite.getDescription()}"
+                    <textarea rows="10" cols="15" name="description" th:value="${specialite.getDescription()}"
                               id="description">
 					</textarea>
                     <span class="text-center text-danger" th:errors="${specialite.description}"></span>
@@ -29,13 +33,13 @@
             </form>
         </div>
     </div>
+    <div th:replace="commons/footer::body-common-scripts"></div>
     <script>
         ClassicEditor
             .create(document.querySelector('#description'))
             .catch(error => {
             console.error(error);
         } )
-
     </script>
 </div>
 </body>

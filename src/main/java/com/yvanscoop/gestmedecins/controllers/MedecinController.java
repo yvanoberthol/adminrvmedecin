@@ -1,5 +1,6 @@
 package com.yvanscoop.gestmedecins.controllers;
 
+import com.itextpdf.text.DocumentException;
 import com.yvanscoop.gestmedecins.entities.CompteMedecin;
 import com.yvanscoop.gestmedecins.entities.Medecin;
 import com.yvanscoop.gestmedecins.entities.MedecinSpecialite;
@@ -10,27 +11,31 @@ import com.yvanscoop.gestmedecins.services.MedecinService;
 import com.yvanscoop.gestmedecins.services.MedecinSpecialiteService;
 import com.yvanscoop.gestmedecins.services.SpecialiteService;
 import com.yvanscoop.gestmedecins.services.mail.MailGlobal;
+import com.yvanscoop.gestmedecins.services.pdf.ItextInPdf;
 import com.yvanscoop.gestmedecins.utilities.SecurityUtility;
+import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -80,29 +85,21 @@ public class MedecinController {
                     .collect(Collectors.toList());
             model.addAttribute("pageNumbers", pageNumbers);
         }
+
+        model.addAttribute("medecinActifCount",medecinService.countActif());
         return "medecins";
     }
 
     @RequestMapping(value = "/deleteMedecin", method = RequestMethod.POST)
+    @Transactional
     public String deleteMedecin(@RequestParam("id") Long id) {
         Medecin medecin = medecinService.getOne(id);
         if (medecin != null) {
             medecinService.delete(id);
             //we delete the picture in his name
-            try {
 
-                /* image name */
-                String name = medecin.getId() + "_" + medecin.getNom() + "_" + medecin.getPrenom() + ".png";
+            dropImage(medecin);
 
-                /* path image */
-                String pathImage = "src/main/resources/static/images/medecins/" + name;
-
-                /* delete file */
-                Files.deleteIfExists(Paths.get(pathImage));
-
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
             //delete all entries of this medecin in table medecinSpecialite
             msService.deleteFromMedecin(medecin);
             compteMedecinService.deleteCompte(medecin);
@@ -140,6 +137,7 @@ public class MedecinController {
     }
 
     @RequestMapping(value = "/modifMedecin", method = RequestMethod.POST)
+    @Transactional
     public String modifMedecin(@Valid Medecin medecinUpdated, BindingResult bindingResult, Model model) {
 
         if (!bindingResult.hasErrors()) {
@@ -147,89 +145,34 @@ public class MedecinController {
             Medecin medecin = medecinService.getOne(medecinUpdated.getId());
 
             //vérification sur l'existence d'un médecin par son matricule
-            Medecin medecinMatricule = medecinService.getByMatricule(medecinUpdated.getMatricule());
-            if (medecinMatricule != null) {
-                if (!medecinMatricule.getMatricule().equals(medecin.getMatricule())) {
+            Medecin medecinBD = medecinService.getByMatricule(medecinUpdated.getMatricule());
+            if (medecinBD != null) {
+                if (!medecinBD.getMatricule().equals(medecin.getMatricule())
+                        || !medecinBD.getEmail().equals(medecinUpdated.getEmail())) {
                     model.addAttribute("medecinExists", true);
                     model.addAttribute("medecin", medecin);
                     return "modifMedecin";
                 }
             }
 
-            //vérification sur l'existence d'un médecin par son email
-            Medecin medecinEmail = medecinService.getByEmail(medecinUpdated.getEmail());
-            if (medecinEmail != null) {
-                if (!medecinEmail.getEmail().equals(medecinUpdated.getEmail())) {
-                    model.addAttribute("medecinExists", true);
-                    model.addAttribute("medecin", medecin);
-                    return "modifMedecin";
-                }
-            }
-
+            // sauver les noms pour la photo
             String lastNom = medecin.getNom();
             String lastPrenom = medecin.getPrenom();
-            /* we modify his informations */
-            medecin.setMatricule(medecinUpdated.getMatricule());
-            medecin.setNom(medecinUpdated.getNom());
-            medecin.setPrenom(medecinUpdated.getPrenom());
-            medecin.setDateNaissance(medecinUpdated.getDateNaissance());
-            /* after modification we save this medecin */
-            Medecin updatedMedecin = medecinService.save(medecin);
+
+            //médécin sauvegardé
+            Medecin updatedMedecin = setMedecin(medecin,medecinUpdated);
 
             // creation du compte
             if(updatedMedecin != null){
-                CompteMedecin compteMedecin = compteMedecinService.getByMedecin(medecinService.getOne(medecin.getId()));
-                if (!compteMedecinService.loginExist(compteMedecin.getLogin())) {
-                    CompteMedecin compteMedecin2 = new CompteMedecin();
-                    compteMedecin2.setLogin(updatedMedecin.getMatricule());
-                    String randomPassword1 = SecurityUtility.randomPassword();
-                    compteMedecin2.setPassword(randomPassword1);
-                    CompteMedecin compteUpdated = compteMedecinService.addCompte(compteMedecin2);
-
-                    if (compteUpdated != null) {
-                        //envoi du mot de passe au médécin
-                        String msgSended = "\nYour password is: " + randomPassword1;
-                        String subjectUpdated = "Mon cabinet médical: Your updated password";
-                        try {
-                            mailConfig.sendMail(updatedMedecin.getEmail(), subjectUpdated, msgSended);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }
+                creerCompteMedecin(updatedMedecin);
             }
 
-            // we describe the process of medecin's image's modification
+            // we describe the process of medecin's image's registration
             /* we take medecin's image */
             MultipartFile updateMedecinImage = medecinUpdated.getPhoto();
+
             /* we verify if he is empty */
-            if (!updateMedecinImage.isEmpty()) {
-                try {
-                    byte[] bytes = updateMedecinImage.getBytes();
-
-                    /* image name */
-                    String name = medecinUpdated.getId() + "_" + medecinUpdated.getNom() + "_" + medecinUpdated.getPrenom() + ".png";
-
-                    /* path image */
-                    String pathImage = "src/main/resources/static/images/medecins/" + name;
-
-                    /* delete old file */
-                    Files.deleteIfExists(Paths.get(pathImage));
-
-                    // save new file
-                    /* open buffer in out */
-                    BufferedOutputStream stream = new BufferedOutputStream(
-                            new FileOutputStream(pathImage)
-                    );
-                    /* write in the buffer */
-                    stream.write(bytes);
-                    /* close buffer */
-                    stream.close();
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
-            } else {
+            if (updateMedecinImage.isEmpty()) {
                 // process to rename picture's medecin
                 String oldName = medecin.getId() + "_" + lastNom + "_" + lastPrenom + ".png";
                 /* old path image */
@@ -245,6 +188,11 @@ public class MedecinController {
 
                 //renommer la photo
                 photo.renameTo(newPhotoName);
+
+            }else{
+                dropImage(medecin);
+                saveImage(medecinUpdated);
+
             }
             return "redirect:/medecins";
         } else {
@@ -254,6 +202,7 @@ public class MedecinController {
     }
 
     @RequestMapping(value = "/addMedecin", method = RequestMethod.POST)
+    @Transactional
     public String addMedecin(@Valid Medecin medecinadd, BindingResult bindingResult, @RequestParam("specialites") List<String> specialites, Model model) {
 
         if (!bindingResult.hasErrors() && !specialites.isEmpty() && !medecinadd.getPhoto().isEmpty()) {
@@ -275,30 +224,14 @@ public class MedecinController {
                 }
             }
 
+            // sauvegarder le médécin
             Medecin medecinAdded = medecinService.save(medecinadd);
 
             // creation du compte
             if (medecinAdded != null){
-                CompteMedecin compteMedecin = compteMedecinService.getByMedecin(medecinAdded);
-                if (!compteMedecinService.loginExist(compteMedecin.getLogin())) {
-                    CompteMedecin compteMedecin1 = new CompteMedecin();
-                    compteMedecin1.setLogin(medecinadd.getMatricule());
-                    String randomPassword = SecurityUtility.randomPassword();
-                    compteMedecin1.setPassword(randomPassword);
-                    CompteMedecin compteCreated = compteMedecinService.addCompte(compteMedecin1);
 
-                    if (compteCreated != null) {
-                        //envoi du mot de passe au médécin
-                        String msgSended = "\nYour password is: " + randomPassword;
-                        String subject = "Mon cabinet médical: Your account password";
-                        try {
-                            mailConfig.sendMail(medecinadd.getEmail(), subject, msgSended);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-                }
+                //creer un compte au médécin
+                creerCompteMedecin(medecinAdded);
 
                 //ajout des spécialités au médécin
                 for (String specialiteName : specialites) {
@@ -307,33 +240,9 @@ public class MedecinController {
                         addMedecinSpecialite(medecinadd, specialite);
                     }
                 }
-                // we describe the process of medecin's image's registration
-                /* we take medecin's image */
-                MultipartFile addMedecinImage = medecinadd.getPhoto();
-                /* we verify if he is empty */
-                if (!addMedecinImage.isEmpty()) {
-                    try {
-                        byte[] bytes = addMedecinImage.getBytes();
 
-                        /* image name */
-                        String name = medecinadd.getId() + "_" + medecinadd.getNom() + "_" + medecinadd.getPrenom() + ".png";
-
-                        /* path image */
-                        String pathImage = "src/main/resources/static/images/medecins/" + name;
-
-                        // save file
-                        /* open buffer in out */
-                        BufferedOutputStream stream = new BufferedOutputStream(
-                                new FileOutputStream(pathImage)
-                        );
-                        /* write in the buffer */
-                        stream.write(bytes);
-                        /* close buffer */
-                        stream.close();
-                    } catch (Exception exception) {
-                        exception.printStackTrace();
-                    }
-                }
+                //sauvegarder la photo du médécin
+                saveImage(medecinadd);
 
             }
 
@@ -356,8 +265,131 @@ public class MedecinController {
 
     }
 
+    @PostMapping("/changerPhoto")
+    private String changerPhoto(@RequestParam(name = "id") Long id,@RequestParam(name = "photo") MultipartFile photo){
+      System.out.print("medecin_Long_id: "+id);
+
+      Medecin medecin = medecinService.getOne(id);
+      medecin.setPhoto(photo);
+      saveImage(medecin);
+      return "redirect:/detailMedecin?id="+id;
+    }
+
+    @GetMapping("/medecin/imprimer")
+    private String imprimer(RedirectAttributes redirectAttributes) throws DocumentException, IOException {
+
+        List<Medecin> medecinList = medecinService.getAll("");
+
+        String[] headers = {"Photo","Matricule","Nom","Prénom"};
+        int nbre_colonnes = headers.length;
+
+        Random rand = new Random();
+
+        // Obtain a number between [10 - 20].
+        int n = rand.nextInt(10) + 10;
+        String name = RandomStringUtils.randomAlphanumeric(n);
+
+        ItextInPdf pdf = new ItextInPdf(name);
+        pdf.setNbre_colonnes(nbre_colonnes);
+        pdf.setEntetes(headers);
+        pdf.setMedecins(medecinList);
+        pdf.imprimerMedecin();
+        redirectAttributes.addFlashAttribute("impressionDone",true);
+
+        return "redirect:/medecins";
+    }
+
+
     private void addMedecinSpecialite(Medecin medecin, Specialite specialite) {
         msRepository.save(new MedecinSpecialite(medecin, specialite));
     }
 
+
+    private void saveImage(Medecin medecinadd){
+        // we describe the process of medecin's image's registration
+        /* we take medecin's image */
+        MultipartFile addMedecinImage = medecinadd.getPhoto();
+        /* we verify if he is empty */
+        if (!addMedecinImage.isEmpty()) {
+            try {
+                byte[] bytes = addMedecinImage.getBytes();
+
+                /* image name */
+                String name = medecinadd.getId() + "_" + medecinadd.getNom() + "_" + medecinadd.getPrenom() + ".png";
+
+                /* path image */
+                String pathImage = "src/main/resources/static/images/medecins/" + name;
+
+                /* delete old file */
+                Files.deleteIfExists(Paths.get(pathImage));
+
+                // save file
+                /* open buffer in out */
+                BufferedOutputStream stream = new BufferedOutputStream(
+                        new FileOutputStream(pathImage)
+                );
+                /* write in the buffer */
+                stream.write(bytes);
+                /* close buffer */
+                stream.close();
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
+    }
+
+
+    private void dropImage(Medecin medecin){
+        try {
+
+            /* image name */
+            String name = medecin.getId() + "_" + medecin.getNom() + "_" + medecin.getPrenom() + ".png";
+
+            /* path image */
+            String pathImage = "src/main/resources/static/images/medecins/" + name;
+
+            /* delete file */
+            Files.deleteIfExists(Paths.get(pathImage));
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    private void creerCompteMedecin(Medecin medecin){
+        CompteMedecin compteMedecin = compteMedecinService.getByMedecin(medecin);
+        if (!compteMedecinService.loginExist(compteMedecin.getLogin())) {
+            CompteMedecin compteMedecin1 = new CompteMedecin();
+            compteMedecin1.setLogin(medecin.getMatricule());
+            String randomPassword = SecurityUtility.randomPassword(18);
+            compteMedecin1.setPassword(randomPassword);
+            CompteMedecin compteCreated = compteMedecinService.addCompte(compteMedecin1);
+
+            if (compteCreated != null) {
+                //envoi du mot de passe au médécin
+                String msgSended = "\nYour password is: " + randomPassword;
+                String subject = "Mon cabinet médical: Your account password";
+                try {
+                    mailConfig.sendMail(medecin.getEmail(), subject, msgSended);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
+    }
+
+    private Medecin setMedecin(Medecin medecin,Medecin medecinUpdated){
+        /* we modify his informations */
+        medecin.setMatricule(medecinUpdated.getMatricule());
+        medecin.setNom(medecinUpdated.getNom());
+        medecin.setPrenom(medecinUpdated.getPrenom());
+        medecin.setEmail(medecinUpdated.getEmail());
+        medecin.setDateNaissance(medecinUpdated.getDateNaissance());
+        medecin.setTelephone(medecinUpdated.getTelephone());
+        medecin.setVille(medecinUpdated.getVille());
+        /* after modification we save this medecin */
+        return medecinService.save(medecin);
+    }
 }

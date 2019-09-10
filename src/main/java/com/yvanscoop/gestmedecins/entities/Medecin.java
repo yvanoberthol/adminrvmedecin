@@ -40,11 +40,20 @@ public class Medecin {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @NotEmpty(message = "entrez le numéro de téléphone du médécin.")
+    @Length(min = 9,message = "Le numéro de téléphone est de 9 chiffres")
+    @Column(nullable = false)
+    private String telephone;
+
     @Past(message = "la date de naissance doit être antérieure à celle d'aujord'hui.")
     @NotNull(message = "entrez la date de naissance ce médécin.")
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateNaissance;
+
+    @NotEmpty(message = "entrez la ville de résidence du médécin.")
+    @Column(nullable = true)
+    private String ville;
 
     @Transient
     private MultipartFile photo;
@@ -63,16 +72,4 @@ public class Medecin {
         super();
         // TODO Auto-generated constructor stub
     }
-
-    public Medecin(String matricule, String nom, String prenom, Date dateNaissance, MultipartFile photo,
-                   List<MedecinSpecialite> medecinSpecialites) {
-        super();
-        this.matricule = matricule;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.dateNaissance = dateNaissance;
-        this.photo = photo;
-        this.medecinSpecialites = medecinSpecialites;
-    }
-
 }

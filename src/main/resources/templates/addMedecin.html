@@ -4,11 +4,15 @@
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-md-8 offset-md-2">
+        <div class="col-md-12">
             <div th:insert="commons/header::myheader"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
             <h1 class="grand-titre">Enregistrer un nouveau médécin</h1>
             <div th:if="${medecinExists == true}"
-                 class="text-center bg-danger font-weight-bold" style="color:white">
+                 class="text-center alert alert-danger font-weight-bold">
                 <span class="fa fa-times-circle"></span> ce matricule est déjà pris.
             </div>
             <form th:action="@{/addMedecin}" method="POST" enctype="multipart/form-data">
@@ -31,6 +35,21 @@
                     <label class="control-label">Date de naissance:</label>
                     <input type="date" name="dateNaissance" th:value=${medecin.getDateNaissance()} class="form-control">
                     <span class="text-center text-danger" th:errors="${medecin.dateNaissance}"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Email:</label>
+                    <input type="email" name="email" th:value=${medecin.getEmail()} class="form-control">
+                    <span class="text-center text-danger" th:errors="${medecin.email}"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Téléphone:</label>
+                    <input type="text" name="telephone" th:value=${medecin.getTelephone()} class="form-control">
+                    <span class="text-center text-danger" th:errors="${medecin.telephone}"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Ville de résidence:</label>
+                    <input type="text" name="ville" th:value=${medecin.getVille()} class="form-control">
+                    <span class="text-center text-danger" th:errors="${medecin.ville}"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Photo:</label>

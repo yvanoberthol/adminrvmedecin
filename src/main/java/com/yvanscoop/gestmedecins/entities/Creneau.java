@@ -1,11 +1,15 @@
 package com.yvanscoop.gestmedecins.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.Range;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "creneaux")
+@Getter @Setter
 public class Creneau {
 
     @Id
@@ -27,6 +31,7 @@ public class Creneau {
     //creneau lié au medecin
     @ManyToOne
     @JoinColumn(name = "id_medecin")
+    @JsonIgnore
     private Medecin medecin;
 
     public Creneau() {
@@ -42,65 +47,8 @@ public class Creneau {
         this.mfin = mfin;
     }
 
-
-    public Long getId() {
-        return id;
+    public String getCreneauAll(){
+        return hdebut+":"+mdebut+" -- "+hfin+":"+mfin;
     }
-
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-
-    public int getHdebut() {
-        return hdebut;
-    }
-
-
-    public void setHdebut(int hdebut) {
-        this.hdebut = hdebut;
-    }
-
-
-    public int getMdebut() {
-        return mdebut;
-    }
-
-
-    public void setMdebut(int mdebut) {
-        this.mdebut = mdebut;
-    }
-
-
-    public int getHfin() {
-        return hfin;
-    }
-
-
-    public void setHfin(int hfin) {
-        this.hfin = hfin;
-    }
-
-
-    public int getMfin() {
-        return mfin;
-    }
-
-
-    public void setMfin(int mfin) {
-        this.mfin = mfin;
-    }
-
-
-    public Medecin getMedecin() {
-        return medecin;
-    }
-
-
-    public void setMedecin(Medecin medecin) {
-        this.medecin = medecin;
-    }
-
 
 }

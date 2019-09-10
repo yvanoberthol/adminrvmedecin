@@ -1,13 +1,18 @@
 package com.yvanscoop.gestmedecins.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yvanscoop.gestmedecins.entities.security.Client;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "rv")
-public class Rv {
+@Getter @Setter
+public class Rv implements Serializable {
 
     @Id
     @GeneratedValue
@@ -19,6 +24,7 @@ public class Rv {
     // un rv est lié à un client
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_client")
+    @JsonIgnore
     private Client client;
 
     // un rv est lié à un créneau
@@ -34,6 +40,7 @@ public class Rv {
     private Boolean annule = false;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "rv")
+    @JsonIgnore
     private TokenRv tokenRv;
 
     // constructeur par défaut
@@ -46,32 +53,4 @@ public class Rv {
         this.client = client;
         this.creneau = creneau;
     }
-
-
-    // getters et setters
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
-
-    public Date getJour() {
-        return jour;
-    }
-
-    public void setJour(Date jour) {
-        this.jour = jour;
-    }
-
-    public Creneau getCreneau() {
-        return creneau;
-    }
-
-    public void setCreneau(Creneau creneau) {
-        this.creneau = creneau;
-    }
-
 }

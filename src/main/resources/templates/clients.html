@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="commons/header::common-header"></head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div th:insert="commons/header::myheader"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <h1 class="text-center grand-titre">La liste des patients (<span th:text="${patients.totalElements}"
+                                                                             class="text-white"></span>)
+            </h1>
+            <nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top text-center">
+                <form class="form-inline" th:action="@{/patients}" method="get">
+                    <input class="form-control mr-sm-2" type="text" name="nom" placeholder="nom ou prénom du patient">
+                    <button class="btn btn-success" type="submit">
+                        <span class="fa fa-search"></span>  Rechercher
+                    </button>
+                </form>
+            </nav>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom(s) et prénom(s)</th>
+                        <th>Téléphone</th>
+                        <th>Email</th>
+                        <th class="font-italic">Total(<span class="text-success" th:text="${patients.totalElements}"></span>)</th>
+                    </tr>
+                    <tr th:each="patient:${patients.content}" th:if="${patients.totalElements > 0}">
+                        <td th:text="${patient.getId()}"></td>
+                        <td th:text="${patient.getFirstName()}+' '+${patient.getLastName()}"></td>
+                        <td th:text="${patient.getPhone()}"></td>
+                        <td th:text="${patient.getEmail()}"></td>
+                        <td>
+                            <button class="btn btn-secondary" type="button" data-th-value="${patient.getEmail()}"
+                                    onclick="event.preventDefault(); var email = $(this).attr('value'); recupererRv(email);">
+                                Ses rendez-vous
+                            </button>
+                        </td>
+                    </tr>
+                    <tr th:if="${patients.totalElements == 0}">
+                        <td colspan="5" class="text-center"><h3 class="text-danger">Aucun résultat trouvé ...</h3></td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <ul th:if="${patients.totalPages > 0}" class="pagination">
+                    <li class="page-item" th:classappend="${patients.number < 1} ? disabled">
+                        <a class="page-link"
+                           th:href="@{/patients(size=${patients.size}, page=${patients.number})}"><span
+                                class="fa fa-angle-double-left"></span> Précédent</a>
+                    </li>
+                    <li th:each="pageNumber : ${pageNumbers}"
+                        th:classappend="${pageNumber==patients.number + 1} ? active" class="page-item">
+                        <a th:href="@{/patients(size=${patients.size}, page=${pageNumber})}"
+                           th:text=${pageNumber} class="page-link">
+                        </a>
+                    </li>
+                    <li class="page-item" th:classappend="${patients.totalPages == patients.number + 1} ? disabled">
+                        <a class="page-link" th:href="@{/patients(size=${patients.size}, page=${patients.number + 2})}">Suivant
+                            <span class="fa fa-angle-double-right"></span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- The Modal -->
+    <div class="modal fade" id="listeRvs" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content grand-titre">
+
+                <!-- Modal Header -->
+                <div class="modal-header text-center">
+                    <h4 class="modal-title">Liste des rendez-vous pris par ce patient</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8 offset-md-2">
+                            <table class="table table-bordered" id="content-rv">
+                                <tr class="bg-secondary text-white">
+                                    <td>Créneau</td>
+                                    <td>Jour</td>
+                                    <td>Spécialité</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><span
+                            class="fa fa-times-circle"></span> Close
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="commons/footer::body-common-scripts"></div>
+<script type="application/javascript">
+    var url = "http://localhost:8089/api/rv/patient/";
+    function recupererRv(email){
+        //chargement des médecins dans le modal
+        $.get( url+email, function(data) {
+            var liste =  $("#listeRvs").modal().find("#content-rv");
+            for (var i=0;i<data.length;i++){
+                var tab = data[i].split(" ");
+                var creneau = tab[0]+tab[1]+tab[2];
+                var jour = tab[3];
+                var specialite = tab[4];
+                liste.append(
+                    '<tr class="text-black font-weight-bold"><td>'+creneau+'</td><td>'+jour+'</td><td>'+specialite+'</td></tr>'
+                );
+            }
+
+        });
+    }
+</script>
+</body>
+</html>

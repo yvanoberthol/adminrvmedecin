@@ -4,23 +4,24 @@
 <body>
 
 <div th:fragment="myfooter">
-    <div class="row bg-dark" style="margin-top:25px; color:white; border-top: 10px solid royalblue">
+    <div class="row bg-dark" style="margin-top:25px; color:white; border-top: 10px solid #018577">
         <div class="col-md-4 text-center">
-            <h4 class="font-weight-bold" style="color:royalblue">Fonctionnalités de l'application</h4>
+            <h4 class="font-weight-bold text-vert">Fonctionnalités de l'application</h4>
             <h6><a th:href="@{/specialites}" style="color:gray;">Gestion des domaines médicaux</a></h6>
             <h6><a th:href="@{/medecins}" style="color:grey;">Gestion des médécins</a></h6>
             <h6><a th:href="@{/creneaux}" style="color:grey;">Gestion des créneaux</a></h6>
+            <h6><a th:href="@{/patients}" style="color:grey;">Gestion des patients</a></h6>
             <h6 sec:authorize="hasRole('ROLE_SUPERADMIN')">
                 <a th:href="@{/users}" style="color:gray;">Gestion des utilisateurs</a>
             </h6>
         </div>
         <div class="col-md-4 text-center">
-            <h4 class="font-weight-bold" style="color:royalblue">Contactez nous</h4>
+            <h4 class="font-weight-bold text-vert">Contactez nous</h4>
             <h6>Email: yvanoberthol@gmail.com</h6>
             <h6>Tel: 690735187 - 682296797</h6>
         </div>
         <div class="col-md-4 text-center">
-            <h4 class="font-weight-bold" style="color:royalblue">Notre état et situation</h4>
+            <h4 class="font-weight-bold text-vert">Notre état et situation</h4>
             <h6>Nous sommes situé à bonabéri(ngwele)</h6>
             <h6>Mon cabinet de médécin copyright @<span class="text-warning"
                                                         th:text="${#dates.format(session.date,'yyyy')}"></span></h6>
@@ -34,11 +35,23 @@
     <script th:src="@{js/canvasjs.min.js}"></script>
     <script th:src="@{js/bootstrap-select.js}"></script>
     <script th:src="@{js/typing.js}"></script>
+    <script>
+        $('.inputfile').on('change',function(){
+
+            var filename = $('input[type=file]').val().split('\\').pop();
+            console.log(filename);
+
+            $('#filename').html(filename);
+
+            $('#validerImage').css('display','block');
+        });
+
+    </script>
     <script type="text/javascript">
         $(document).ready(function () {
             $('#page-effect').fadeIn(1000);
             var url = "http://localhost:8089/menuPrincipal";
-            $("#loader").fadeOut(10000, function () {
+            $("#loader").fadeOut(6500, function () {
                 $(location).attr('href', url);
             });
 

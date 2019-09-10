@@ -11,7 +11,7 @@ public class Responsabilite {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long responsabiliteId;
+    private Long id;
 
     private String name;
 
@@ -23,19 +23,19 @@ public class Responsabilite {
         // TODO Auto-generated constructor stub
     }
 
-    public Responsabilite(Long responsabiliteId, String name, Set<ClientResponsabilite> clientResponsabilites) {
+    public Responsabilite(Long id, String name, Set<ClientResponsabilite> clientResponsabilites) {
         super();
-        this.responsabiliteId = responsabiliteId;
+        this.id = id;
         this.name = name;
         this.clientResponsabilites = clientResponsabilites;
     }
 
-    public Long getResponsabiliteId() {
-        return responsabiliteId;
+    public Long getId() {
+        return id;
     }
 
-    public void setResponsabiliteId(Long responsabiliteId) {
-        this.responsabiliteId = responsabiliteId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
